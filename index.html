@@ -576,70 +576,79 @@
         </div>
        </section>
 <section id="quote-calculator" class="relative z-20 w-full px-4 py-16 lg:py-24 bg-black/20 border-t border-amber-400/10">
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-6xl mx-auto">
          <div class="text-center mb-12">
-          <span class="text-4xl mb-2 block" aria-hidden="true">🧮</span>
-          <h2 class="font-display text-4xl font-bold gradient-text mb-4">Build Your Quote</h2>
-          <p class="text-gray-300 text-lg max-w-2xl mx-auto">Get an instant estimate for your event and easily send it to us!</p>
+          <span class="text-4xl mb-2 block" aria-hidden="true">✨</span>
+          <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Build Your Custom Quote</h2>
+          <p class="text-gray-300 text-lg max-w-2xl mx-auto">Drag and drop your favorite items into your event box!</p>
           <div class="divider-line w-32 mx-auto mt-6"></div>
          </div>
 
-         <div class="bg-white/5 p-6 lg:p-10 rounded-2xl backdrop-blur-md border border-amber-400/20 shadow-xl">
-          <div class="mb-6">
-           <label class="block text-white mb-3 font-semibold text-lg">1. Choose Your Base Package</label>
-           <select id="calc-package" class="contact-input w-full p-4 rounded-lg text-lg appearance-none cursor-pointer">
-            <option value="0">-- Select a Package --</option>
-            <optgroup label="Standard Packages">
-             <option value="350">Essential ($350)</option>
-             <option value="500">Signature ($500)</option>
-             <option value="700">Luxury ($700)</option>
-             <option value="1000">Ultimate ($1000)</option>
-            </optgroup>
-            <optgroup label="Shimmer Wall Bundles">
-             <option value="450">Essential Shimmer ($450)</option>
-             <option value="550">Signature Shimmer ($550)</option>
-             <option value="650">Luxe Shimmer ($650)</option>
-             <option value="800">Ultimate Shimmer ($800)</option>
-            </optgroup>
-            <optgroup label="Ramadan & Eid Specials">
-             <option value="350">Essential Ramadan ($350)</option>
-             <option value="500">Signature Ramadan ($500)</option>
-             <option value="700">Luxury Ramadan ($700)</option>
-             <option value="1000">Eid & Grand Iftar ($1000)</option>
-            </optgroup>
-           </select>
-          </div>
+         <div class="flex flex-col lg:flex-row gap-8">
+          
+          <div class="w-full lg:w-1/2 bg-white/5 p-6 rounded-2xl backdrop-blur-md border border-amber-400/20 shadow-xl">
+           <p class="text-sm text-amber-200/70 mb-4 uppercase tracking-wider text-center lg:text-left">Click or Drag items</p>
+           
+           <h3 class="font-semibold text-white mb-3">📦 Packages</h3>
+           <div class="grid grid-cols-2 gap-3 mb-6">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Package" data-price="500" data-type="package">
+             <span class="text-amber-400 font-bold">$500</span>
+             <span class="text-gray-200 text-sm text-center">Signature</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Luxury Package" data-price="700" data-type="package">
+             <span class="text-amber-400 font-bold">$700</span>
+             <span class="text-gray-200 text-sm text-center">Luxury</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Ultimate Package" data-price="1000" data-type="package">
+             <span class="text-amber-400 font-bold">$1000</span>
+             <span class="text-gray-200 text-sm text-center">Ultimate</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Ultimate Shimmer" data-price="800" data-type="package">
+             <span class="text-amber-400 font-bold">$800</span>
+             <span class="text-gray-200 text-sm text-center">Ultimate Shimmer</span>
+            </div>
+           </div>
 
-          <div class="mb-8">
-           <label class="block text-white mb-3 font-semibold text-lg">2. Select Your Add-Ons</label>
-           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <label class="flex items-center gap-3 p-3 rounded-lg border border-amber-400/20 hover:bg-amber-400/10 cursor-pointer transition-colors">
-             <input type="checkbox" class="calc-addon w-5 h-5 accent-amber-500" value="75" data-name="Marquee Letters">
-             <span class="text-gray-200">Marquee Letters (+$75 est.)</span>
-            </label>
-            <label class="flex items-center gap-3 p-3 rounded-lg border border-amber-400/20 hover:bg-amber-400/10 cursor-pointer transition-colors">
-             <input type="checkbox" class="calc-addon w-5 h-5 accent-amber-500" value="115" data-name="Throne Chair">
-             <span class="text-gray-200">Throne Chair (+$115 est.)</span>
-            </label>
-            <label class="flex items-center gap-3 p-3 rounded-lg border border-amber-400/20 hover:bg-amber-400/10 cursor-pointer transition-colors">
-             <input type="checkbox" class="calc-addon w-5 h-5 accent-amber-500" value="60" data-name="Cylinder Cake Table">
-             <span class="text-gray-200">Cylinder Cake Table (+$60 est.)</span>
-            </label>
-            <label class="flex items-center gap-3 p-3 rounded-lg border border-amber-400/20 hover:bg-amber-400/10 cursor-pointer transition-colors">
-             <input type="checkbox" class="calc-addon w-5 h-5 accent-amber-500" value="150" data-name="Entry Aisle Décor">
-             <span class="text-gray-200">Entry Aisle Décor (+$150 est.)</span>
-            </label>
+           <h3 class="font-semibold text-white mb-3">✨ Add-Ons</h3>
+           <div class="grid grid-cols-2 gap-3">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Marquee Letters" data-price="75" data-type="addon">
+             <span class="text-amber-400 font-bold">+$75</span>
+             <span class="text-gray-200 text-sm text-center">Marquee Letters</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Throne Chair" data-price="115" data-type="addon">
+             <span class="text-amber-400 font-bold">+$115</span>
+             <span class="text-gray-200 text-sm text-center">Throne Chair</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Cake Table" data-price="60" data-type="addon">
+             <span class="text-amber-400 font-bold">+$60</span>
+             <span class="text-gray-200 text-sm text-center">Cake Table</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Entry Decor" data-price="150" data-type="addon">
+             <span class="text-amber-400 font-bold">+$150</span>
+             <span class="text-gray-200 text-sm text-center">Entry Décor</span>
+            </div>
            </div>
           </div>
 
-          <div class="border-t border-amber-400/20 pt-8 mt-4 text-center">
-           <p class="text-gray-400 mb-2">Estimated Total</p>
-           <div class="font-display text-5xl font-bold text-white mb-6">$<span id="calc-total">0</span></div>
-           <button type="button" onclick="sendQuoteToForm()" class="cta-button w-full sm:w-auto px-10 py-4 rounded-lg text-lg font-semibold shadow-lg inline-flex items-center justify-center gap-2">
-            <span>📝</span> Start Booking Request
-           </button>
-           <p class="text-gray-500 text-xs mt-4">*This is a rough estimate. Final quotes may vary based on exact customizations and travel distance.</p>
+          <div class="w-full lg:w-1/2">
+           <div id="drop-zone" class="h-full min-h-[450px] bg-slate-900/50 p-6 rounded-2xl border-2 border-dashed border-amber-400/40 flex flex-col transition-all duration-300">
+            <h3 class="text-2xl font-display font-bold text-white mb-2 text-center">Your Event Setup</h3>
+            <p class="text-gray-400 text-sm mb-6 text-center">Drag packages and add-ons here to build your quote.</p>
+            
+            <div id="cart-items" class="flex-grow space-y-3 mb-6">
+             <p class="text-gray-600 text-center mt-12 italic">Your setup is currently empty</p>
+            </div>
+
+            <div class="border-t border-amber-400/20 pt-6 mt-auto text-center">
+             <p class="text-gray-400 mb-1">Estimated Total</p>
+             <div class="font-display text-5xl font-bold text-white mb-6">$<span id="calc-total">0</span></div>
+             <button type="button" onclick="sendQuoteToForm()" class="cta-button w-full px-8 py-4 rounded-lg text-lg font-semibold shadow-lg inline-flex items-center justify-center gap-2">
+              <span>📝</span> Start Booking Request
+             </button>
+            </div>
+           </div>
           </div>
+
          </div>
         </div>
        </section>
@@ -929,43 +938,118 @@
    if (window.elementSdk) {
     window.elementSdk.init({ defaultConfig, onConfigChange, mapToCapabilities, mapToEditPanelValues });
    }
-   // --- Build Your Quote Calculator Logic ---
-   const packageSelect = document.getElementById('calc-package');
-   const addonCheckboxes = document.querySelectorAll('.calc-addon');
+// --- Drag & Drop Builder Logic ---
+   const dragItems = document.querySelectorAll('.drag-item');
+   const dropZone = document.getElementById('drop-zone');
+   const cartItemsContainer = document.getElementById('cart-items');
    const totalDisplay = document.getElementById('calc-total');
+   let cart = [];
 
-   function calculateTotal() {
-     let total = parseInt(packageSelect.value) || 0;
-     addonCheckboxes.forEach(cb => {
-       if (cb.checked) {
-         total += parseInt(cb.value);
-       }
+   // Set up draggable items
+   dragItems.forEach(item => {
+     // Desktop Dragging
+     item.addEventListener('dragstart', (e) => {
+       e.dataTransfer.setData('text/plain', JSON.stringify({
+         name: item.dataset.name,
+         price: item.dataset.price,
+         type: item.dataset.type
+       }));
+       item.classList.add('opacity-40', 'scale-95');
      });
+     
+     item.addEventListener('dragend', () => {
+       item.classList.remove('opacity-40', 'scale-95');
+     });
+
+     // Mobile Clicking Fallback
+     item.addEventListener('click', () => {
+       addToCart(item.dataset.name, parseInt(item.dataset.price), item.dataset.type);
+     });
+   });
+
+   // Set up Drop Zone
+   if(dropZone) {
+     dropZone.addEventListener('dragover', (e) => {
+       e.preventDefault(); // Required to allow dropping
+       dropZone.classList.add('bg-amber-400/10', 'border-amber-400', 'scale-[1.02]');
+     });
+
+     dropZone.addEventListener('dragleave', () => {
+       dropZone.classList.remove('bg-amber-400/10', 'border-amber-400', 'scale-[1.02]');
+     });
+
+     dropZone.addEventListener('drop', (e) => {
+       e.preventDefault();
+       dropZone.classList.remove('bg-amber-400/10', 'border-amber-400', 'scale-[1.02]');
+       
+       const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+       addToCart(data.name, parseInt(data.price), data.type);
+     });
+   }
+
+   function addToCart(name, price, type) {
+     // If they add a package, automatically replace the old package so they only have 1 base
+     if(type === 'package') {
+        cart = cart.filter(item => item.type !== 'package');
+     }
+     
+     // Prevent duplicates of the same add-on
+     if (!cart.some(item => item.name === name)) {
+       cart.push({ name, price, type });
+       renderCart();
+     }
+   }
+
+   // Attach this to the window so the HTML buttons can see it
+   window.removeFromCart = function(name) {
+     cart = cart.filter(item => item.name !== name);
+     renderCart();
+   }
+
+   function renderCart() {
+     cartItemsContainer.innerHTML = '';
+     let total = 0;
+
+     if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="text-gray-600 text-center mt-12 italic">Your setup is currently empty</p>';
+     }
+
+     cart.forEach(item => {
+       total += item.price;
+       const div = document.createElement('div');
+       div.className = 'flex justify-between items-center bg-slate-800 p-3 rounded-lg border border-amber-400/40 slide-up shadow-lg';
+       div.innerHTML = `
+         <div class="flex items-center gap-3">
+            <span class="text-xl">${item.type === 'package' ? '📦' : '✨'}</span>
+            <div>
+               <p class="text-white font-medium">${item.name}</p>
+               <p class="text-amber-400 text-sm">$${item.price}</p>
+            </div>
+         </div>
+         <button type="button" onclick="window.removeFromCart('${item.name}')" class="text-gray-400 hover:text-red-400 transition text-2xl px-2">&times;</button>
+       `;
+       cartItemsContainer.appendChild(div);
+     });
+
      totalDisplay.textContent = total;
    }
 
-   if(packageSelect) packageSelect.addEventListener('change', calculateTotal);
-   addonCheckboxes.forEach(cb => cb.addEventListener('change', calculateTotal));
-
    window.sendQuoteToForm = function() {
-     if (!packageSelect) return;
-     const selectedPackage = packageSelect.options[packageSelect.selectedIndex];
-     
-     if (selectedPackage.value === "0") {
-       alert("Please select a base package first to build your quote!");
+     if (cart.length === 0) {
+       alert("Please click or drag items into your setup box to build a quote first!");
        return;
      }
 
-     let summary = "Hi! I'd like to request a booking based on my estimated quote.\n\n";
-     summary += "🎯 Base Package: " + selectedPackage.text + "\n";
+     let summary = "Hi! I'd like to request a booking based on my custom built quote.\n\n";
      
-     let addons = [];
-     addonCheckboxes.forEach(cb => {
-       if (cb.checked) addons.push(cb.getAttribute('data-name'));
-     });
-     
-     if (addons.length > 0) {
-       summary += "✨ Add-ons: " + addons.join(", ") + "\n";
+     const packages = cart.filter(i => i.type === 'package');
+     const addons = cart.filter(i => i.type === 'addon');
+
+     if(packages.length > 0) {
+         summary += "🎯 Base Package: " + packages[0].name + "\n";
+     }
+     if(addons.length > 0) {
+         summary += "✨ Add-ons: " + addons.map(a => a.name).join(", ") + "\n";
      }
      
      summary += "💰 Estimated Total: $" + totalDisplay.textContent + "\n\n";
@@ -974,10 +1058,9 @@
      const reasonBox = document.getElementById('reason');
      if (reasonBox) {
        reasonBox.value = summary;
-       // Scroll to the contact form smoothly
        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
        
-       // Briefly highlight the box so the user sees it pre-filled
+       // Briefly highlight the contact box so they see it was pre-filled
        reasonBox.style.transition = "background-color 0.5s ease";
        reasonBox.style.backgroundColor = "rgba(212, 175, 55, 0.3)";
        setTimeout(() => {
