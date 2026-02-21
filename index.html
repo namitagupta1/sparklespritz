@@ -2117,6 +2117,7 @@
      const item = cart.find(i => i.name === name);
 
      if (item) {
+      if (item.type === 'package' && change > 0) return alert("You can only select one base package per event!");
 
        item.quantity += change;
 
@@ -2234,7 +2235,7 @@
 
      }
 
-
+if (parseInt(totalDisplay.textContent) > 3000) return alert("Your event looks grand! Since estimates over $3,000 require custom coordination, please call us directly at (404) 952-3355 to book.");
 
      let summary = "Hi! I'd like to request a booking based on my custom built quote.\n\n";
 
