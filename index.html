@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" style="scroll-behavior: smooth;">
+<html lang="en">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,7 @@
   
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="/_sdk/element_sdk.js"></script>
+
   <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -20,7 +21,8 @@
   <style>
     .font-display { font-family: 'Playfair Display', Georgia, serif; }
     .font-body { font-family: 'Quicksand', 'Segoe UI', sans-serif; }
-   /* Smooth Scroll Momentum Utilities */
+    
+    /* Smooth Scroll Momentum Utilities */
     html.lenis { height: auto; }
     .lenis.lenis-smooth { scroll-behavior: auto !important; }
     .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
@@ -37,18 +39,12 @@
       50% { transform: translateY(-10px); }
     }
     
-    @keyframes slideInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
     .sparkle-1 { animation: sparkle 3s ease-in-out infinite; }
     .sparkle-2 { animation: sparkle 3s ease-in-out infinite 0.7s; }
     .sparkle-3 { animation: sparkle 3s ease-in-out infinite 1.4s; }
     .sparkle-4 { animation: sparkle 3s ease-in-out infinite 2.1s; }
     
     .float-animation { animation: float 3s ease-in-out infinite; }
-    .slide-up { animation: slideInUp 0.8s ease-out forwards; }
     
     .gradient-text {
       background: linear-gradient(135deg, #d4af37 0%, #f4e4bc 50%, #d4af37 100%);
@@ -198,22 +194,9 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: rgba(212, 175, 55, 0.8); 
     }
-
-    /* Premium Scroll Reveal Elements */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-    }
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
   </style>
-  <style>body { box-sizing: border-box; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="font-body">
+ <body class="font-body text-white bg-[#1a1a2e]">
   
   <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/95 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true" aria-label="Image gallery popup">
    <button aria-label="Close image popup" class="absolute top-6 right-8 text-gray-400 text-5xl cursor-pointer hover:text-amber-400 transition-colors focus:outline-none focus:text-amber-400" onclick="closeLightbox()">&times;</button>
@@ -229,7 +212,7 @@
    </div>
   </div>
 
-  <div id="app-wrapper" class="w-full" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);">
+  <div id="app-wrapper" class="w-full relative" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);">
    
    <div class="fixed inset-0 pointer-events-none overflow-hidden z-10" aria-hidden="true">
     <div class="sparkle-1 absolute top-20 left-10 text-2xl">⭐</div>
@@ -260,8 +243,8 @@
    </header>
 
    <main>
-       <section id="hero" class="hero-section relative w-full px-4" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);">
-        <div class="max-w-4xl mx-auto text-center slide-up relative z-20">
+       <section id="hero" class="hero-section relative w-full px-4">
+        <div id="hero-content" class="max-w-4xl mx-auto text-center relative z-20">
          <div class="float-animation inline-block mb-6 mt-16">
           <img src="image-removebg-preview-4.png" alt="Sparkle and Spritz Element" class="h-40 lg:h-56 w-auto object-contain drop-shadow-2xl mx-auto">
          </div>
@@ -284,8 +267,8 @@
        </section>
 
        <section id="services" class="relative z-20 w-full px-4 py-16 lg:py-24">
-        <div class="max-w-6xl mx-auto reveal">
-         <div class="text-center mb-16">
+        <div class="max-w-6xl mx-auto">
+         <div class="text-center mb-16" id="services-header">
           <span class="text-4xl mb-2 block" aria-hidden="true">🎯</span>
           <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Our Services</h2>
           <p class="text-gray-300 text-lg max-w-2xl mx-auto">From intimate gatherings to grand celebrations, we create unforgettable experiences</p>
@@ -357,8 +340,8 @@
        </section>
 
        <section id="pricing" class="relative z-20 w-full px-4 py-16 lg:py-24">
-        <div class="max-w-6xl mx-auto reveal">
-         <div class="text-center mb-16">
+        <div class="max-w-6xl mx-auto">
+         <div class="text-center mb-16" id="pricing-header">
           <span class="text-4xl mb-2 block" aria-hidden="true">💳</span>
           <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Packages &amp; Pricing</h2>
           <p class="text-gray-300 text-lg max-w-2xl mx-auto">Flexible options for every celebration and budget</p>
@@ -562,7 +545,7 @@
           </div>
          </div>
 
-         <div class="text-center mb-16">
+         <div class="text-center mb-16" id="addons-header">
           <h3 class="font-display text-2xl lg:text-3xl font-semibold gradient-text mb-8">Add-Ons</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
            <div class="addon-card rounded-xl p-4" style="background: rgba(26, 26, 46, 0.6);">
@@ -613,7 +596,7 @@
        </section>
 
        <section id="quote-calculator" class="relative z-20 w-full px-4 py-16 lg:py-24 bg-black/20 border-t border-amber-400/10">
-        <div class="max-w-6xl mx-auto reveal">
+        <div class="max-w-6xl mx-auto">
          <div class="text-center mb-12">
           <span class="text-4xl mb-2 block" aria-hidden="true">✨</span>
           <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Build Your Custom Quote</h2>
@@ -743,8 +726,8 @@
        </section>
 
        <section id="gallery" class="relative z-20 w-full px-4 py-16 lg:py-24">
-        <div class="max-w-6xl mx-auto reveal">
-         <div class="text-center mb-16">
+        <div class="max-w-6xl mx-auto">
+         <div class="text-center mb-16" id="gallery-header">
           <span class="text-4xl mb-2 block" aria-hidden="true">🖼️</span>
           <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Gallery</h2>
           <p class="text-gray-300 text-lg max-w-2xl mx-auto">See our work shine in real celebrations</p>
@@ -773,8 +756,8 @@
        </section>
 
        <section id="faq" class="relative z-20 w-full px-4 py-16 lg:py-24">
-        <div class="max-w-4xl mx-auto reveal">
-         <div class="text-center mb-16">
+        <div class="max-w-4xl mx-auto">
+         <div class="text-center mb-16" id="faq-header">
           <span class="text-4xl mb-2 block" aria-hidden="true">❓</span>
           <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Frequently Asked Questions</h2>
           <div class="divider-line w-32 mx-auto mt-6"></div>
@@ -811,9 +794,10 @@
          </div>
         </div>
        </section>
+
        <section id="contact" class="relative z-20 w-full px-4 py-16 lg:py-24">
-        <div class="max-w-4xl mx-auto reveal">
-         <div class="text-center mb-12">
+        <div class="max-w-4xl mx-auto">
+         <div class="text-center mb-12" id="contact-header">
           <span class="text-4xl mb-2 block" aria-hidden="true">📞</span>
           <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Let's Create Magic Together</h2>
           <p class="text-gray-300 text-lg mb-2">Please fill out our booking form as your first line of contact!</p>
@@ -921,10 +905,8 @@
     lightboxImg.src = src;
     lightbox.classList.remove('hidden');
     
-    // Focus the lightbox for accessibility
     lightbox.focus();
     
-    // Tiny timeout ensures the display transition has time to trigger the fade effect
     setTimeout(() => {
      lightbox.classList.remove('opacity-0');
     }, 10);
@@ -939,31 +921,26 @@
     }, 300);
    }
 
-   // Close lightbox when clicking anywhere on the black background
    document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) {
-     closeLightbox();
-    }
+    if (e.target === this) closeLightbox();
    });
 
-   // Close lightbox with Escape key
    document.addEventListener('keydown', function(event) {
      if (event.key === "Escape" && !document.getElementById('lightbox').classList.contains('hidden')) {
        closeLightbox();
      }
    });
 
-  // Form Submission & Success Popup Logic
+   // Form Submission & Success Popup Logic
    const contactForm = document.querySelector('form');
    if (contactForm) {
     contactForm.addEventListener('submit', async function(e) {
-     e.preventDefault(); // Prevents the page from refreshing
+     e.preventDefault(); 
      
      const form = e.target;
      const data = new FormData(form);
      
      try {
-       // Send the data to Formspree
        const response = await fetch(form.action, {
          method: form.method,
          body: data,
@@ -973,7 +950,6 @@
        });
        
        if (response.ok) {
-         // If successful, show your beautiful custom popup!
          const modal = document.getElementById('success-modal');
          const content = document.getElementById('success-content');
          
@@ -984,7 +960,7 @@
           content.classList.add('scale-100');
          }, 10);
          
-         form.reset(); // Clears the form fields
+         form.reset(); 
        } else {
          alert("Oops! There was a problem submitting your request. Please try giving us a call instead.");
        }
@@ -1004,7 +980,11 @@
     
     setTimeout(() => {
      modal.classList.add('hidden');
-     window.scrollTo({ top: 0, behavior: 'smooth' }); // Scrolls back to the top (home)
+     if(typeof window.lenis !== 'undefined') {
+         window.lenis.scrollTo(0, { duration: 1.5 });
+     } else {
+         window.scrollTo({ top: 0, behavior: 'smooth' });
+     }
     }, 300);
    }
 
@@ -1039,96 +1019,92 @@
     window.elementSdk.init({ defaultConfig, onConfigChange, mapToCapabilities, mapToEditPanelValues });
    }
 
-   // --- Scroll Reveal Animation Engine ---
-   document.addEventListener('DOMContentLoaded', () => {
-     const observerOptions = {
-       root: null,
-       rootMargin: '0px',
-       threshold: 0.15 // Triggers when 15% of the element is visible
-     };
-
-     const observer = new IntersectionObserver((entries, observer) => {
-       entries.forEach(entry => {
-         if (entry.isIntersecting) {
-           entry.target.classList.add('active');
-           observer.unobserve(entry.target); // Only animate once
-         }
-       });
-     }, observerOptions);
-
-     document.querySelectorAll('.reveal').forEach(el => {
-       observer.observe(el);
-     });
-   });
-// --- APPLE-LIKE ANIMATION ENGINE ---
+   // --- APPLE-LIKE ANIMATION ENGINE ---
    document.addEventListener("DOMContentLoaded", (event) => {
- // --- APPLE-LIKE ANIMATION ENGINE ---
-   document.addEventListener("DOMContentLoaded", (event) => {
-       // 1. Initialize Smooth Momentum Scroll
-       const lenis = new Lenis({
-           duration: 1.2,
-           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-           direction: 'vertical',
-           smooth: true
-       });
+       
+       if (typeof Lenis !== 'undefined') {
+           const lenis = new Lenis({
+               duration: 1.2,
+               easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+               direction: 'vertical',
+               smooth: true
+           });
 
-       // SYNC LENIS WITH GSAP SCROLLTRIGGER (This fixes the invisible sections!)
-       lenis.on('scroll', ScrollTrigger.update);
-       gsap.ticker.add((time) => {
-           lenis.raf(time * 1000);
-       });
-       gsap.ticker.lagSmoothing(0);
+           if (typeof ScrollTrigger !== 'undefined') {
+               lenis.on('scroll', ScrollTrigger.update);
+               gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+               gsap.ticker.lagSmoothing(0);
+           } else {
+               function raf(time) {
+                   lenis.raf(time);
+                   requestAnimationFrame(raf);
+               }
+               requestAnimationFrame(raf);
+           }
+           window.lenis = lenis;
+       }
 
-       // 2. Initialize GSAP Scroll Animations
-       gsap.registerPlugin(ScrollTrigger);
+       if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+           gsap.registerPlugin(ScrollTrigger);
 
-       // Parallax Hero (Fades and scrolls up at a different speed)
-       gsap.to("#hero > div", {
-           yPercent: 40,
-           opacity: 0,
-           scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
-       });
+           // Hero Parallax
+           gsap.to("#hero-content", {
+               yPercent: 40, opacity: 0, ease: "none",
+               scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+           });
 
-       // Floating Cascade for Services
-       gsap.from("#services .package-card", {
-           y: 60, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out",
-           scrollTrigger: { trigger: "#services", start: "top 80%" }
-       });
+           // Services Float
+           gsap.from("#services .package-card", {
+               y: 50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out",
+               scrollTrigger: { trigger: "#services-header", start: "top 85%" }
+           });
 
-       // Floating Cascade for Pricing
-       gsap.from("#pricing .package-card", {
-           y: 60, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power3.out",
-           scrollTrigger: { trigger: "#pricing", start: "top 80%" }
-       });
+           // Pricing Float
+           gsap.from("#pricing .package-card", {
+               y: 50, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power3.out",
+               scrollTrigger: { trigger: "#pricing-header", start: "top 85%" }
+           });
+           
+           // Addons Float
+           gsap.from(".addon-card", {
+               y: 30, opacity: 0, duration: 0.6, stagger: 0.05, ease: "power2.out",
+               scrollTrigger: { trigger: "#addons-header", start: "top 85%" }
+           });
 
-       // Builder Reveal
-       gsap.from("#quote-calculator > div", {
-           y: 40, opacity: 0, duration: 1, ease: "power3.out",
-           scrollTrigger: { trigger: "#quote-calculator", start: "top 80%" }
-       });
+           // Builder Reveal
+           gsap.from("#quote-calculator .bg-white\\/5", {
+               y: 40, opacity: 0, duration: 1, ease: "power3.out",
+               scrollTrigger: { trigger: "#quote-calculator", start: "top 85%" }
+           });
 
-       // Gallery Stagger (Images pop in one by one)
-       gsap.from(".gallery-grid > div", {
-           y: 40, opacity: 0, duration: 0.6, stagger: 0.05, ease: "back.out(1.7)",
-           scrollTrigger: { trigger: "#gallery", start: "top 85%" }
-       });
+           // Gallery Cascade
+           gsap.from(".gallery-grid > div", {
+               y: 40, opacity: 0, duration: 0.6, stagger: 0.05, ease: "back.out(1.7)",
+               scrollTrigger: { trigger: "#gallery-header", start: "top 85%" }
+           });
 
-       // FAQ Cards Slide In
-       gsap.from("#faq .rounded-lg", {
-           x: -30, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out",
-           scrollTrigger: { trigger: "#faq", start: "top 85%" }
-       });
+           // FAQ Slide
+           gsap.from("#faq .rounded-lg", {
+               x: -30, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out",
+               scrollTrigger: { trigger: "#faq-header", start: "top 85%" }
+           });
+           
+           // Contact Form
+           gsap.from("#contact form", {
+               y: 40, opacity: 0, duration: 0.8, ease: "power3.out",
+               scrollTrigger: { trigger: "#contact-header", start: "top 85%" }
+           });
+       }
    });
+
    // --- Drag & Drop Builder Logic ---
    const dragItems = document.querySelectorAll('.drag-item');
    const dropZone = document.getElementById('drop-zone');
    const cartItemsContainer = document.getElementById('cart-items');
    const totalDisplay = document.getElementById('calc-total');
-   let cart = []; // Now tracks quantity!
+   let cart = []; 
 
-   // Set up draggable items
    dragItems.forEach(item => {
-     // Desktop Dragging
      item.addEventListener('dragstart', (e) => {
        e.dataTransfer.setData('text/plain', JSON.stringify({
          name: item.dataset.name,
@@ -1142,16 +1118,14 @@
        item.classList.remove('opacity-40', 'scale-95');
      });
 
-     // Mobile Clicking Fallback
      item.addEventListener('click', () => {
        addToCart(item.dataset.name, parseInt(item.dataset.price), item.dataset.type);
      });
    });
 
-   // Set up Drop Zone
    if(dropZone) {
      dropZone.addEventListener('dragover', (e) => {
-       e.preventDefault(); // Required to allow dropping
+       e.preventDefault(); 
        dropZone.classList.add('bg-amber-400/10', 'border-amber-400', 'scale-[1.02]');
      });
 
@@ -1169,26 +1143,21 @@
    }
 
    function addToCart(name, price, type) {
-     // Check if item is already in cart
      const existingItem = cart.find(item => item.name === name);
      
      if (existingItem) {
-       // If it is, just increase the quantity
        existingItem.quantity += 1;
      } else {
-       // If it's not, add it with a quantity of 1
        cart.push({ name, price, type, quantity: 1 });
      }
      
      renderCart();
    }
 
-   // Update quantity with +/- buttons
    window.updateQty = function(name, change) {
      const item = cart.find(i => i.name === name);
      if (item) {
        item.quantity += change;
-       // Remove item if quantity drops to 0
        if (item.quantity <= 0) {
          cart = cart.filter(i => i.name !== name);
        }
@@ -1196,7 +1165,6 @@
      }
    }
 
-   // Remove completely with the X button
    window.removeFromCart = function(name) {
      cart = cart.filter(item => item.name !== name);
      renderCart();
@@ -1211,7 +1179,6 @@
      }
 
      cart.forEach(item => {
-       // Multiply price by quantity
        const itemTotal = item.price * item.quantity;
        total += itemTotal;
        
@@ -1248,7 +1215,6 @@
 
      let summary = "Hi! I'd like to request a booking based on my custom built quote.\n\n";
      
-     // Build the summary list showing quantities
      cart.forEach(item => {
         let emoji = item.type === 'package' ? '📦' : '✨';
         summary += `${emoji} ${item.quantity}x ${item.name} ($${item.price * item.quantity})\n`;
@@ -1259,15 +1225,19 @@
      const reasonBox = document.getElementById('reason');
      if (reasonBox) {
        reasonBox.value = summary;
-       document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
        
-       // Briefly highlight the contact box so they see it was pre-filled
+       if(typeof window.lenis !== 'undefined') {
+           window.lenis.scrollTo('#contact', { duration: 1.5 });
+       } else {
+           document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+       }
+       
        reasonBox.style.transition = "background-color 0.5s ease";
        reasonBox.style.backgroundColor = "rgba(212, 175, 55, 0.3)";
        setTimeout(() => {
            reasonBox.style.backgroundColor = "rgba(26, 26, 46, 0.6)";
            reasonBox.focus();
-       }, 800);
+       }, 1500);
      }
    };
   </script>
