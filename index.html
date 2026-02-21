@@ -995,7 +995,7 @@
    const dropZone = document.getElementById('drop-zone');
    const cartItemsContainer = document.getElementById('cart-items');
    const totalDisplay = document.getElementById('calc-total');
-   let cart = [];
+   let cart = []; // Now tracks quantity!
 
    // Set up draggable items
    dragItems.forEach(item => {
@@ -1003,7 +1003,7 @@
      item.addEventListener('dragstart', (e) => {
        e.dataTransfer.setData('text/plain', JSON.stringify({
          name: item.dataset.name,
-         price: item.dataset.price,
+         price: parseInt(item.dataset.price),
          type: item.dataset.type
        }));
        item.classList.add('opacity-40', 'scale-95');
@@ -1040,19 +1040,34 @@
    }
 
    function addToCart(name, price, type) {
-     // If they add a package, automatically replace the old package so they only have 1 base
-     if(type === 'package') {
-        cart = cart.filter(item => item.type !== 'package');
+     // Check if item is already in cart
+     const existingItem = cart.find(item => item.name === name);
+     
+     if (existingItem) {
+       // If it is, just increase the quantity
+       existingItem.quantity += 1;
+     } else {
+       // If it's not, add it with a quantity of 1
+       cart.push({ name, price, type, quantity: 1 });
      }
      
-     // Prevent duplicates of the same add-on
-     if (!cart.some(item => item.name === name)) {
-       cart.push({ name, price, type });
+     renderCart();
+   }
+
+   // Update quantity with +/- buttons
+   window.updateQty = function(name, change) {
+     const item = cart.find(i => i.name === name);
+     if (item) {
+       item.quantity += change;
+       // Remove item if quantity drops to 0
+       if (item.quantity <= 0) {
+         cart = cart.filter(i => i.name !== name);
+       }
        renderCart();
      }
    }
 
-   // Attach this to the window so the HTML buttons can see it
+   // Remove completely with the X button
    window.removeFromCart = function(name) {
      cart = cart.filter(item => item.name !== name);
      renderCart();
@@ -1067,18 +1082,28 @@
      }
 
      cart.forEach(item => {
-       total += item.price;
+       // Multiply price by quantity
+       const itemTotal = item.price * item.quantity;
+       total += itemTotal;
+       
        const div = document.createElement('div');
-       div.className = 'flex justify-between items-center bg-slate-800 p-3 rounded-lg border border-amber-400/40 slide-up shadow-lg';
+       div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-800 p-3 rounded-lg border border-amber-400/40 slide-up shadow-lg gap-3 mb-2';
        div.innerHTML = `
          <div class="flex items-center gap-3">
             <span class="text-xl">${item.type === 'package' ? '📦' : '✨'}</span>
             <div>
                <p class="text-white font-medium">${item.name}</p>
-               <p class="text-amber-400 text-sm">$${item.price}</p>
+               <p class="text-amber-400 text-sm">$${item.price} each</p>
             </div>
          </div>
-         <button type="button" onclick="window.removeFromCart('${item.name}')" class="text-gray-400 hover:text-red-400 transition text-2xl px-2">&times;</button>
+         <div class="flex items-center gap-3 self-end sm:self-auto">
+            <div class="flex items-center bg-slate-900 rounded-lg overflow-hidden border border-amber-400/20">
+               <button type="button" onclick="window.updateQty('${item.name}', -1)" class="px-3 py-1 text-gray-400 hover:text-white hover:bg-slate-700 transition font-bold">-</button>
+               <span class="text-white px-3 font-medium">${item.quantity}</span>
+               <button type="button" onclick="window.updateQty('${item.name}', 1)" class="px-3 py-1 text-gray-400 hover:text-white hover:bg-slate-700 transition font-bold">+</button>
+            </div>
+            <button type="button" onclick="window.removeFromCart('${item.name}')" class="text-gray-400 hover:text-red-400 transition text-2xl px-2" title="Remove">&times;</button>
+         </div>
        `;
        cartItemsContainer.appendChild(div);
      });
@@ -1094,17 +1119,13 @@
 
      let summary = "Hi! I'd like to request a booking based on my custom built quote.\n\n";
      
-     const packages = cart.filter(i => i.type === 'package');
-     const addons = cart.filter(i => i.type === 'addon');
-
-     if(packages.length > 0) {
-         summary += "🎯 Base Package: " + packages[0].name + "\n";
-     }
-     if(addons.length > 0) {
-         summary += "✨ Add-ons: " + addons.map(a => a.name).join(", ") + "\n";
-     }
+     // Build the summary list showing quantities
+     cart.forEach(item => {
+        let emoji = item.type === 'package' ? '📦' : '✨';
+        summary += `${emoji} ${item.quantity}x ${item.name} ($${item.price * item.quantity})\n`;
+     });
      
-     summary += "💰 Estimated Total: $" + totalDisplay.textContent + "\n\n";
+     summary += "\n💰 Estimated Total: $" + totalDisplay.textContent + "\n\n";
      summary += "Event Date: \nEvent Location/Venue: \nTheme/Colors: ";
 
      const reasonBox = document.getElementById('reason');
