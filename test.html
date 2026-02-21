@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="h-full" style="scroll-behavior: auto;">
+<html lang="en" class="h-full" style="scroll-behavior: smooth;">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +9,6 @@
   
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="/_sdk/element_sdk.js"></script>
-
-  <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,13 +17,6 @@
   <style>
     .font-display { font-family: 'Playfair Display', Georgia, serif; }
     .font-body { font-family: 'Quicksand', 'Segoe UI', sans-serif; }
-    
-    /* Smooth Scroll Momentum Utilities */
-    html.lenis { height: auto; }
-    .lenis.lenis-smooth { scroll-behavior: auto !important; }
-    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-    .lenis.lenis-stopped { overflow: hidden; }
-    .lenis.lenis-scrolling iframe { pointer-events: none; }
     
     @keyframes sparkle {
       0%, 100% { opacity: 0.2; transform: scale(0.8); }
@@ -40,7 +29,7 @@
     }
     
     @keyframes slideInUp {
-      from { opacity: 0; transform: translateY(30px); }
+      from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
     }
     
@@ -50,8 +39,38 @@
     .sparkle-4 { animation: sparkle 3s ease-in-out infinite 2.1s; }
     
     .float-animation { animation: float 3s ease-in-out infinite; }
-    .slide-up { animation: slideInUp 0.8s ease-out forwards; }
+    .slide-up { animation: slideInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     
+    /* Apple-style Scroll Reveals */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); 
+      will-change: opacity, transform;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* Apple-style Glassmorphism */
+    .glass-effect {
+      background: rgba(26, 26, 46, 0.65);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .glass-effect-premium {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(26, 26, 46, 0.8) 100%);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
     .gradient-text {
       background: linear-gradient(135deg, #d4af37 0%, #f4e4bc 50%, #d4af37 100%);
       -webkit-background-clip: text;
@@ -60,14 +79,14 @@
     }
     
     .package-card {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       border: 1px solid rgba(212, 175, 55, 0.2);
     }
     
     .package-card:hover, .package-card:focus-within {
-      transform: translateY(-8px);
-      border-color: rgba(212, 175, 55, 0.5);
-      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
+      transform: translateY(-4px);
+      border-color: rgba(212, 175, 55, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
     
     .price-tag {
@@ -95,12 +114,12 @@
     }
     
     .portfolio-img {
-      transition: transform 0.4s ease, opacity 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
       aspect-ratio: 1;
     }
     
     .portfolio-img:hover {
-      transform: scale(1.05);
+      transform: scale(1.03);
       opacity: 0.9;
     }
     
@@ -124,11 +143,12 @@
       justify-content: center;
     }
     
+    /* Updated Tactile Button */
     .cta-button {
       background: linear-gradient(135deg, #d4af37 0%, #f4e4bc 50%, #d4af37 100%);
       color: #1a1a2e;
       font-weight: 600;
-      transition: all 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
       border: none;
       cursor: pointer;
       display: inline-block;
@@ -136,10 +156,13 @@
     }
     
     .cta-button:hover, .cta-button:focus {
-      transform: scale(1.05);
-      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
-      outline: 2px solid #f4e4bc;
-      outline-offset: 2px;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+      outline: none;
+    }
+
+    .cta-button:active {
+      transform: scale(0.97);
     }
 
     .package-tab {
@@ -184,33 +207,6 @@
     .contact-input::placeholder {
       color: rgba(255, 255, 255, 0.3);
     }
-
-    /* Premium Custom Scrollbar for Inventory */
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(26, 26, 46, 0.3); 
-      border-radius: 8px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(212, 175, 55, 0.4); 
-      border-radius: 8px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: rgba(212, 175, 55, 0.8); 
-    }
-
-    /* Premium Scroll Reveal Elements */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-    }
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
   </style>
   <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
@@ -225,7 +221,7 @@
   <div id="success-modal" class="fixed inset-0 z-[60] hidden bg-black/90 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true">
    <div id="success-content" class="bg-gradient-to-b from-[#1a1a2e] to-[#16213e] border border-amber-500/30 p-8 md:p-10 rounded-2xl shadow-2xl max-w-md w-full text-center transform scale-95 transition-all duration-300">
     <div class="text-5xl mb-4">✨</div>
-    <h3 class="font-display text-3xl font-bold gradient-text mb-3">Thank You!</h3>
+    <h3 class="font-display tracking-tight text-3xl font-bold gradient-text mb-3">Thank You!</h3>
     <p class="text-gray-300 mb-8 leading-relaxed">Your message has been successfully sent. We will get back to you shortly to help make your event sparkle!</p>
     <button onclick="closeSuccessModal()" class="cta-button w-full py-3 rounded-lg text-lg font-semibold shadow-lg">Return to Home</button>
    </div>
@@ -244,11 +240,11 @@
     <div class="sparkle-4 absolute bottom-20 left-1/3 text-lg">✨</div>
    </div>
 
-   <header class="fixed top-0 left-0 right-0 z-40 px-4 py-4 lg:px-8 lg:py-6" style="background: linear-gradient(180deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.9) 100%); backdrop-filter: blur(10px);">
+   <header class="fixed top-0 left-0 right-0 z-40 px-4 py-4 lg:px-8 lg:py-6 glass-effect border-b-0">
     <nav class="max-w-6xl mx-auto flex justify-between items-center" aria-label="Main Navigation">
      <div class="flex items-center gap-2">
       <span class="text-2xl" aria-hidden="true">✨</span>
-      <h1 id="company-name" class="font-display text-xl lg:text-2xl font-bold gradient-text">Sparkle &amp; Spritz</h1>
+      <h1 id="company-name" class="font-display tracking-tight text-xl lg:text-2xl font-bold gradient-text">Sparkle &amp; Spritz</h1>
      </div>
      <div class="hidden md:flex gap-8">
       <a href="#hero" class="nav-link text-gray-300 hover:text-amber-400 text-sm lg:text-base">Home</a> 
@@ -263,15 +259,15 @@
 
    <main>
        <section id="hero" class="hero-section relative w-full px-4" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);">
-        <div id="hero-content" class="max-w-4xl mx-auto text-center slide-up relative z-20">
+        <div class="max-w-4xl mx-auto text-center slide-up relative z-20">
          <div class="float-animation inline-block mb-6 mt-16">
           <img src="image-removebg-preview-4.png" alt="Sparkle and Spritz Element" class="h-40 lg:h-56 w-auto object-contain drop-shadow-2xl mx-auto">
          </div>
-         <h2 id="hero-title" class="font-display text-5xl lg:text-7xl font-bold gradient-text mb-4">Make Every Moment Sparkle</h2>
-         <p id="hero-subtitle" class="text-gray-300 text-lg lg:text-2xl mb-4 max-w-2xl mx-auto">Premium event décor and styling for celebrations that shine</p>
-         <p id="service-areas" class="text-amber-300 text-sm lg:text-base mb-8 font-medium">Marietta • Kennesaw • Atlanta • Woodstock</p>
+         <h2 id="hero-title" class="font-display tracking-tight text-5xl lg:text-7xl font-bold gradient-text mb-4">Make Every Moment Sparkle</h2>
+         <p id="hero-subtitle" class="text-gray-300 leading-relaxed text-lg lg:text-2xl mb-4 max-w-2xl mx-auto">Premium event décor and styling for celebrations that shine</p>
+         <p id="service-areas" class="text-amber-300 text-sm lg:text-base mb-8 font-medium tracking-wide">Marietta • Kennesaw • Atlanta • Woodstock</p>
          <a href="#services" class="cta-button px-8 lg:px-12 py-3 lg:py-4 rounded-lg text-lg font-semibold mb-8">Get Started</a>
-         <div class="flex justify-center gap-8 text-gray-400 text-sm lg:text-base">
+         <div class="flex justify-center gap-8 text-gray-400 text-sm lg:text-base reveal reveal-delay-2">
           <div class="flex flex-col items-center">
            <span class="text-3xl mb-2" aria-hidden="true">🎈</span> <span>Custom Designs</span>
           </div>
@@ -285,69 +281,69 @@
         </div>
        </section>
 
-       <section id="services" class="relative z-20 w-full px-4 py-16 lg:py-24">
+      <section id="services" class="relative z-20 w-full px-4 py-16 lg:py-24">
         <div class="max-w-6xl mx-auto">
-         <div class="text-center mb-16 gsap-fade-up">
+         <div class="text-center mb-16 reveal">
           <span class="text-4xl mb-2 block" aria-hidden="true">🎯</span>
-          <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Our Services</h2>
-          <p class="text-gray-300 text-lg max-w-2xl mx-auto">From intimate gatherings to grand celebrations, we create unforgettable experiences</p>
+          <h2 class="font-display tracking-tight text-4xl lg:text-5xl font-bold gradient-text mb-4">Our Services</h2>
+          <p class="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">From intimate gatherings to grand celebrations, we create unforgettable experiences</p>
           <div class="divider-line w-32 mx-auto mt-6"></div>
          </div>
          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="package-card rounded-2xl p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="package-card glass-effect rounded-2xl p-8 reveal reveal-delay-1">
            <span class="text-4xl mb-4 block" aria-hidden="true">🎂</span>
-           <h3 class="font-display text-2xl font-semibold text-white mb-3">Birthday Parties</h3>
-           <p class="text-gray-400 mb-4">Custom balloon garlands, themed backdrops, and stunning focal décor designed to make the birthday person feel special.</p>
+           <h3 class="font-display tracking-tight text-2xl font-semibold text-white mb-3">Birthday Parties</h3>
+           <p class="text-gray-400 mb-4 leading-relaxed">Custom balloon garlands, themed backdrops, and stunning focal décor designed to make the birthday person feel special.</p>
            <ul class="space-y-2 text-sm text-gray-300">
             <li><span class="check-icon" aria-hidden="true">✔</span> Age-specific themes</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Custom color schemes</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Personalized setups</li>
            </ul>
           </div>
-          <div class="package-card rounded-2xl p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="package-card glass-effect rounded-2xl p-8 reveal reveal-delay-2">
            <span class="text-4xl mb-4 block" aria-hidden="true">💒</span>
-           <h3 class="font-display text-2xl font-semibold text-white mb-3">Weddings</h3>
-           <p class="text-gray-400 mb-4">Elegant and romantic décor that complements your special day with sophisticated styling and timeless beauty.</p>
+           <h3 class="font-display tracking-tight text-2xl font-semibold text-white mb-3">Weddings</h3>
+           <p class="text-gray-400 mb-4 leading-relaxed">Elegant and romantic décor that complements your special day with sophisticated styling and timeless beauty.</p>
            <ul class="space-y-2 text-sm text-gray-300">
             <li><span class="check-icon" aria-hidden="true">✔</span> Ceremony styling</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Reception setups</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Romantic accents</li>
            </ul>
           </div>
-          <div class="package-card rounded-2xl p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="package-card glass-effect rounded-2xl p-8 reveal reveal-delay-3">
            <span class="text-4xl mb-4 block" aria-hidden="true">🎉</span>
-           <h3 class="font-display text-2xl font-semibold text-white mb-3">Corporate Events</h3>
-           <p class="text-gray-400 mb-4">Professional and polished décor solutions for galas, fundraisers, product launches, and company celebrations.</p>
+           <h3 class="font-display tracking-tight text-2xl font-semibold text-white mb-3">Corporate Events</h3>
+           <p class="text-gray-400 mb-4 leading-relaxed">Professional and polished décor solutions for galas, fundraisers, product launches, and company celebrations.</p>
            <ul class="space-y-2 text-sm text-gray-300">
             <li><span class="check-icon" aria-hidden="true">✔</span> Brand integration</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Professional themes</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Large-scale installs</li>
            </ul>
           </div>
-          <div class="package-card rounded-2xl p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="package-card glass-effect rounded-2xl p-8 reveal reveal-delay-1">
            <span class="text-4xl mb-4 block" aria-hidden="true">👶</span>
-           <h3 class="font-display text-2xl font-semibold text-white mb-3">Baby Showers</h3>
-           <p class="text-gray-400 mb-4">Soft, beautiful décor perfect for welcoming a new addition with gentle colors and whimsical touches.</p>
+           <h3 class="font-display tracking-tight text-2xl font-semibold text-white mb-3">Baby Showers</h3>
+           <p class="text-gray-400 mb-4 leading-relaxed">Soft, beautiful décor perfect for welcoming a new addition with gentle colors and whimsical touches.</p>
            <ul class="space-y-2 text-sm text-gray-300">
             <li><span class="check-icon" aria-hidden="true">✔</span> Pastel themes</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Gender reveals</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Cozy setups</li>
            </ul>
           </div>
-          <div class="package-card rounded-2xl p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="package-card glass-effect rounded-2xl p-8 reveal reveal-delay-2">
            <span class="text-4xl mb-4 block" aria-hidden="true">🎓</span>
-           <h3 class="font-display text-2xl font-semibold text-white mb-3">Graduations</h3>
-           <p class="text-gray-400 mb-4">Celebratory designs that mark major milestones with pride, class colors, and memorable installations.</p>
+           <h3 class="font-display tracking-tight text-2xl font-semibold text-white mb-3">Graduations</h3>
+           <p class="text-gray-400 mb-4 leading-relaxed">Celebratory designs that mark major milestones with pride, class colors, and memorable installations.</p>
            <ul class="space-y-2 text-sm text-gray-300">
             <li><span class="check-icon" aria-hidden="true">✔</span> School colors</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Photo backdrops</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Festive themes</li>
            </ul>
           </div>
-          <div class="package-card rounded-2xl p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="package-card glass-effect rounded-2xl p-8 reveal reveal-delay-3">
            <span class="text-4xl mb-4 block" aria-hidden="true">🎪</span>
-           <h3 class="font-display text-2xl font-semibold text-white mb-3">Seasonal Specials</h3>
-           <p class="text-gray-400 mb-4">Holiday, Ramadan, Eid, and themed celebrations tailored to your vision and cultural moments.</p>
+           <h3 class="font-display tracking-tight text-2xl font-semibold text-white mb-3">Seasonal Specials</h3>
+           <p class="text-gray-400 mb-4 leading-relaxed">Holiday, Ramadan, Eid, and themed celebrations tailored to your vision and cultural moments.</p>
            <ul class="space-y-2 text-sm text-gray-300">
             <li><span class="check-icon" aria-hidden="true">✔</span> Seasonal themes</li>
             <li><span class="check-icon" aria-hidden="true">✔</span> Cultural celebrations</li>
@@ -360,25 +356,25 @@
 
        <section id="pricing" class="relative z-20 w-full px-4 py-16 lg:py-24">
         <div class="max-w-6xl mx-auto">
-         <div class="text-center mb-16 gsap-fade-up">
+         <div class="text-center mb-16 reveal">
           <span class="text-4xl mb-2 block" aria-hidden="true">💳</span>
-          <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Packages &amp; Pricing</h2>
-          <p class="text-gray-300 text-lg max-w-2xl mx-auto">Flexible options for every celebration and budget</p>
+          <h2 class="font-display tracking-tight text-4xl lg:text-5xl font-bold gradient-text mb-4">Packages &amp; Pricing</h2>
+          <p class="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">Flexible options for every celebration and budget</p>
           <div class="divider-line w-32 mx-auto mt-6"></div>
          </div>
          
-         <div class="flex flex-wrap justify-center gap-3 mb-12 gsap-fade-up" role="tablist">
+         <div class="flex flex-wrap justify-center gap-3 mb-12 reveal" role="tablist">
           <button role="tab" aria-selected="true" aria-controls="standard-tab" class="package-tab active px-6 py-2 rounded-full font-semibold text-sm lg:text-base" data-tab="standard" style="background: rgba(212, 175, 55, 0.3); color: #d4af37;">Standard Packages</button> 
           <button role="tab" aria-selected="false" aria-controls="shimmer-tab" class="package-tab px-6 py-2 rounded-full font-semibold text-sm lg:text-base" data-tab="shimmer" style="background: rgba(212, 175, 55, 0.3); color: #d4af37;">Shimmer Wall Bundles</button> 
           <button role="tab" aria-selected="false" aria-controls="special-tab" class="package-tab px-6 py-2 rounded-full font-semibold text-sm lg:text-base" data-tab="special" style="background: rgba(212, 175, 55, 0.3); color: #d4af37;">Seasonal Specials</button>
          </div>
 
-         <div id="standard-tab" class="tab-content" role="tabpanel">
+         <div id="standard-tab" class="tab-content reveal" role="tabpanel">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-16">
-           <div class="package-card rounded-2xl p-6 lg:p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+           <div class="package-card glass-effect rounded-2xl p-6 lg:p-8">
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">✨</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Essential</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Essential</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$350</span></div>
             <ul class="space-y-3">
@@ -388,10 +384,10 @@
              <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Delivery, setup &amp; teardown</span></li>
             </ul>
            </div>
-           <div class="package-card rounded-2xl p-6 lg:p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+           <div class="package-card glass-effect rounded-2xl p-6 lg:p-8">
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">💕</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Signature</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Signature</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$500</span></div>
             <ul class="space-y-3">
@@ -402,10 +398,10 @@
              <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Delivery, setup &amp; teardown</span></li>
             </ul>
            </div>
-           <div class="package-card rounded-2xl p-6 lg:p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+           <div class="package-card glass-effect rounded-2xl p-6 lg:p-8">
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">💎</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Luxury</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Luxury</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$700</span></div>
             <ul class="space-y-3">
@@ -416,11 +412,11 @@
              <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Delivery, setup &amp; teardown</span></li>
             </ul>
            </div>
-           <div class="package-card rounded-2xl p-6 lg:p-8 relative overflow-hidden gsap-stagger-card" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); backdrop-filter: blur(10px);">
-            <div class="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-yellow-400 text-xs font-bold text-gray-900 px-3 py-1 rounded-full">MOST POPULAR</div>
+           <div class="package-card glass-effect-premium rounded-2xl p-6 lg:p-8 relative overflow-hidden">
+            <div class="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-yellow-400 text-xs font-bold text-gray-900 px-3 py-1 rounded-full shadow-md">MOST POPULAR</div>
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">👑</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Ultimate</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Ultimate</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$1000</span></div>
             <ul class="space-y-3">
@@ -435,13 +431,13 @@
           </div>
          </div>
 
-         <div id="shimmer-tab" class="tab-content hidden" role="tabpanel">
+         <div id="shimmer-tab" class="tab-content hidden reveal" role="tabpanel">
           <p class="text-center text-gray-300 mb-8 text-lg">Shimmer wall photo backdrops paired with premium balloon and floral décor</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-16">
-           <div class="package-card rounded-2xl p-6 lg:p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+           <div class="package-card glass-effect rounded-2xl p-6 lg:p-8">
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">✨</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Essential Shimmer</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Essential Shimmer</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$450</span></div>
             <ul class="space-y-3">
@@ -451,10 +447,10 @@
              <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Delivery, setup &amp; teardown</span></li>
             </ul>
            </div>
-           <div class="package-card rounded-2xl p-6 lg:p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+           <div class="package-card glass-effect rounded-2xl p-6 lg:p-8">
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">💕</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Signature Shimmer</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Signature Shimmer</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$550</span></div>
             <ul class="space-y-3">
@@ -465,10 +461,10 @@
              <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Delivery, setup &amp; teardown</span></li>
             </ul>
            </div>
-           <div class="package-card rounded-2xl p-6 lg:p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+           <div class="package-card glass-effect rounded-2xl p-6 lg:p-8">
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">💎</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Luxe Shimmer</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Luxe Shimmer</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$650</span></div>
             <ul class="space-y-3">
@@ -479,11 +475,11 @@
              <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Delivery, setup &amp; teardown</span></li>
             </ul>
            </div>
-           <div class="package-card rounded-2xl p-6 lg:p-8 relative overflow-hidden gsap-stagger-card" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); backdrop-filter: blur(10px);">
-            <div class="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-yellow-400 text-xs font-bold text-gray-900 px-3 py-1 rounded-full">BEST VALUE</div>
+           <div class="package-card glass-effect-premium rounded-2xl p-6 lg:p-8 relative overflow-hidden">
+            <div class="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-yellow-400 text-xs font-bold text-gray-900 px-3 py-1 rounded-full shadow-md">BEST VALUE</div>
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">👑</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Ultimate Shimmer</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Ultimate Shimmer</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$800</span></div>
             <ul class="space-y-3">
@@ -498,16 +494,16 @@
           </div>
          </div>
 
-         <div id="special-tab" class="tab-content hidden" role="tabpanel">
-          <div class="rounded-2xl p-8 lg:p-12 mb-12" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(26, 26, 46, 0.85) 100%);">
-           <h3 id="special-title" class="font-display text-3xl lg:text-4xl font-bold gradient-text mb-3">Ramadan Balloon &amp; Floral Décor</h3>
-           <p id="special-description" class="text-gray-300 text-lg max-w-3xl">Create a warm and elegant Ramadan atmosphere for your home or restaurant with our custom balloon and floral styling. Perfect for Iftar gatherings, Ramadan nights, Eid celebrations, and restaurant décor.</p>
+         <div id="special-tab" class="tab-content hidden reveal" role="tabpanel">
+          <div class="glass-effect-premium rounded-2xl p-8 lg:p-12 mb-12">
+           <h3 id="special-title" class="font-display tracking-tight text-3xl lg:text-4xl font-bold gradient-text mb-3">Ramadan Balloon &amp; Floral Décor</h3>
+           <p id="special-description" class="text-gray-300 text-lg max-w-3xl leading-relaxed">Create a warm and elegant Ramadan atmosphere for your home or restaurant with our custom balloon and floral styling. Perfect for Iftar gatherings, Ramadan nights, Eid celebrations, and restaurant décor.</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-16">
-           <div class="package-card rounded-2xl p-6 lg:p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+           <div class="package-card glass-effect rounded-2xl p-6 lg:p-8">
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">🌙</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Essential Ramadan</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Essential Ramadan</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$350</span></div>
             <ul class="space-y-3">
@@ -518,10 +514,10 @@
              <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Delivery, setup &amp; teardown</span></li>
             </ul>
            </div>
-           <div class="package-card rounded-2xl p-6 lg:p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+           <div class="package-card glass-effect rounded-2xl p-6 lg:p-8">
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">⭐</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Signature Ramadan</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Signature Ramadan</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$500</span></div>
             <ul class="space-y-3">
@@ -532,10 +528,10 @@
              <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Delivery, setup &amp; teardown</span></li>
             </ul>
            </div>
-           <div class="package-card rounded-2xl p-6 lg:p-8 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+           <div class="package-card glass-effect rounded-2xl p-6 lg:p-8">
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">💎</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Luxury Ramadan</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Luxury Ramadan</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$700</span></div>
             <ul class="space-y-3">
@@ -546,11 +542,11 @@
              <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Delivery, setup &amp; teardown</span></li>
             </ul>
            </div>
-           <div class="package-card rounded-2xl p-6 lg:p-8 relative overflow-hidden gsap-stagger-card" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); backdrop-filter: blur(10px);">
-            <div class="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-yellow-400 text-xs font-bold text-gray-900 px-3 py-1 rounded-full">PREMIUM</div>
+           <div class="package-card glass-effect-premium rounded-2xl p-6 lg:p-8 relative overflow-hidden">
+            <div class="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-yellow-400 text-xs font-bold text-gray-900 px-3 py-1 rounded-full shadow-md">PREMIUM</div>
             <div class="flex items-center gap-3 mb-4">
              <span class="text-3xl" aria-hidden="true">👑</span>
-             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Eid &amp; Grand Iftar</h3>
+             <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold text-white">Eid &amp; Grand Iftar</h3>
             </div>
             <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$1000</span></div>
             <ul class="space-y-3">
@@ -564,84 +560,84 @@
           </div>
          </div>
 
-         <div class="text-center mb-16">
-          <h3 class="font-display text-2xl lg:text-3xl font-semibold gradient-text mb-8">Add-Ons</h3>
+         <div class="text-center mb-16 reveal">
+          <h3 class="font-display tracking-tight text-2xl lg:text-3xl font-semibold gradient-text mb-8">Add-Ons</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-           <div class="addon-card rounded-xl p-4 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.6);">
+           <div class="addon-card rounded-xl p-4 glass-effect">
             <h4 class="text-white font-medium mb-1">Marquee Letters</h4>
             <p class="text-gray-500 text-xs mb-2">EID / RAMADAN</p><span class="price-tag font-display text-lg font-bold">$65–85</span>
            </div>
-           <div class="addon-card rounded-xl p-4 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.6);">
+           <div class="addon-card rounded-xl p-4 glass-effect">
             <h4 class="text-white font-medium mb-1">Throne Chair</h4>
             <p class="text-gray-500 text-xs mb-2">Elegant seating</p><span class="price-tag font-display text-lg font-bold">$100–125</span>
            </div>
-           <div class="addon-card rounded-xl p-4 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.6);">
+           <div class="addon-card rounded-xl p-4 glass-effect">
             <h4 class="text-white font-medium mb-1">Cylinder Cake Table</h4>
             <p class="text-gray-500 text-xs mb-2">Modern display stand</p><span class="price-tag font-display text-lg font-bold">$45–75</span>
            </div>
-           <div class="addon-card rounded-xl p-4 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.6);">
+           <div class="addon-card rounded-xl p-4 glass-effect">
             <h4 class="text-white font-medium mb-1">Centerpieces</h4>
             <p class="text-gray-500 text-xs mb-2">Table arrangements</p><span class="price-tag font-display text-lg font-bold">$15–25</span>
            </div>
-           <div class="addon-card rounded-xl p-4 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.6);">
+           <div class="addon-card rounded-xl p-4 glass-effect">
             <h4 class="text-white font-medium mb-1">Entry Aisle Décor</h4>
             <p class="text-gray-500 text-xs mb-2">Grand entrance</p><span class="price-tag font-display text-lg font-bold">$125–200</span>
            </div>
-           <div class="addon-card rounded-xl p-4 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.6);">
+           <div class="addon-card rounded-xl p-4 glass-effect">
             <h4 class="text-white font-medium mb-1">Shimmer Wall Upgrade</h4>
             <p class="text-gray-500 text-xs mb-2">Photo backdrop</p><span class="price-tag font-display text-lg font-bold">$120–220</span>
            </div>
-           <div class="addon-card rounded-xl p-4 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.6);">
+           <div class="addon-card rounded-xl p-4 glass-effect">
             <h4 class="text-white font-medium mb-1">Balloon Wall</h4>
             <p class="text-gray-500 text-xs mb-2">Custom installation</p><span class="price-tag font-display text-lg font-bold">$20/sq ft</span>
            </div>
-           <div class="addon-card rounded-xl p-4 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.6);">
+           <div class="addon-card rounded-xl p-4 glass-effect">
             <h4 class="text-white font-medium mb-1">Extra Florals</h4>
             <p class="text-gray-500 text-xs mb-2">Custom enhancements</p><span class="price-tag font-display text-lg font-bold">Custom</span>
            </div>
-           <div class="addon-card rounded-xl p-4 gsap-stagger-card" style="background: rgba(26, 26, 46, 0.6);">
+           <div class="addon-card rounded-xl p-4 glass-effect">
             <h4 class="text-white font-medium mb-1">Travel Fee</h4>
             <p class="text-gray-500 text-xs mb-2">Beyond 15 miles</p><span class="price-tag font-display text-lg font-bold">Variable</span>
            </div>
           </div>
          </div>
 
-         <div class="delivery-info rounded-2xl p-6 lg:p-8 mx-auto max-w-2xl">
-          <h4 class="font-display text-xl lg:text-2xl font-semibold text-white mb-4">🚚 Delivery &amp; Setup Policy</h4>
-          <p class="text-gray-300 mb-3">All packages include delivery, professional installation, and teardown within <strong>15 miles of Town Center Mall in Kennesaw, GA</strong>.</p>
-          <p class="text-gray-300">Events located beyond 15 miles may incur an additional travel fee based on distance and setup requirements.</p>
+         <div class="delivery-info rounded-2xl p-6 lg:p-8 mx-auto max-w-2xl reveal glass-effect">
+          <h4 class="font-display tracking-tight text-xl lg:text-2xl font-semibold text-white mb-4">🚚 Delivery &amp; Setup Policy</h4>
+          <p class="text-gray-300 leading-relaxed mb-3">All packages include delivery, professional installation, and teardown within <strong>15 miles of Town Center Mall in Kennesaw, GA</strong>.</p>
+          <p class="text-gray-300 leading-relaxed">Events located beyond 15 miles may incur an additional travel fee based on distance and setup requirements.</p>
          </div>
         </div>
        </section>
 
        <section id="quote-calculator" class="relative z-20 w-full px-4 py-16 lg:py-24 bg-black/20 border-t border-amber-400/10">
-        <div class="max-w-6xl mx-auto reveal gsap-fade-up">
+        <div class="max-w-6xl mx-auto reveal">
          <div class="text-center mb-12">
           <span class="text-4xl mb-2 block" aria-hidden="true">✨</span>
-          <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Build Your Custom Quote</h2>
-          <p class="text-gray-300 text-lg max-w-2xl mx-auto">Click or drag your favorite items into your event box to get an estimate!</p>
+          <h2 class="font-display tracking-tight text-4xl lg:text-5xl font-bold gradient-text mb-4">Build Your Custom Quote</h2>
+          <p class="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">Click or drag your favorite items into your event box to get an estimate!</p>
           <div class="divider-line w-32 mx-auto mt-6"></div>
          </div>
 
          <div class="flex flex-col lg:flex-row gap-8 items-start">
           
-          <div class="w-full lg:w-1/2 bg-white/5 p-6 rounded-2xl backdrop-blur-md border border-amber-400/20 shadow-xl lg:max-h-[700px] overflow-y-auto custom-scrollbar">
+          <div class="w-full lg:w-1/2 glass-effect p-6 rounded-2xl shadow-xl lg:max-h-[700px] overflow-y-auto custom-scrollbar">
            
            <h3 class="font-semibold text-white mb-3 text-lg border-b border-amber-400/20 pb-2">📦 Standard Packages</h3>
            <div class="grid grid-cols-2 gap-3 mb-8">
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Package" data-price="350" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Package" data-price="350" data-type="package">
              <span class="text-amber-400 font-bold">$350</span>
              <span class="text-gray-200 text-sm text-center">Essential</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Package" data-price="500" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Package" data-price="500" data-type="package">
              <span class="text-amber-400 font-bold">$500</span>
              <span class="text-gray-200 text-sm text-center">Signature</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Luxury Package" data-price="700" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Luxury Package" data-price="700" data-type="package">
              <span class="text-amber-400 font-bold">$700</span>
              <span class="text-gray-200 text-sm text-center">Luxury</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Ultimate Package" data-price="1000" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Ultimate Package" data-price="1000" data-type="package">
              <span class="text-amber-400 font-bold">$1000</span>
              <span class="text-gray-200 text-sm text-center">Ultimate</span>
             </div>
@@ -649,19 +645,19 @@
 
            <h3 class="font-semibold text-white mb-3 text-lg border-b border-amber-400/20 pb-2">✨ Shimmer Wall Bundles</h3>
            <div class="grid grid-cols-2 gap-3 mb-8">
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Shimmer" data-price="450" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Shimmer" data-price="450" data-type="package">
              <span class="text-amber-400 font-bold">$450</span>
              <span class="text-gray-200 text-sm text-center">Essential Shimmer</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Shimmer" data-price="550" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Shimmer" data-price="550" data-type="package">
              <span class="text-amber-400 font-bold">$550</span>
              <span class="text-gray-200 text-sm text-center">Signature Shimmer</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Luxe Shimmer" data-price="650" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Luxe Shimmer" data-price="650" data-type="package">
              <span class="text-amber-400 font-bold">$650</span>
              <span class="text-gray-200 text-sm text-center">Luxe Shimmer</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Ultimate Shimmer" data-price="800" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Ultimate Shimmer" data-price="800" data-type="package">
              <span class="text-amber-400 font-bold">$800</span>
              <span class="text-gray-200 text-sm text-center">Ultimate Shimmer</span>
             </div>
@@ -669,19 +665,19 @@
 
            <h3 class="font-semibold text-white mb-3 text-lg border-b border-amber-400/20 pb-2">🌙 Ramadan & Eid Specials</h3>
            <div class="grid grid-cols-2 gap-3 mb-8">
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Ramadan" data-price="350" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Ramadan" data-price="350" data-type="package">
              <span class="text-amber-400 font-bold">$350</span>
              <span class="text-gray-200 text-sm text-center">Essential Ramadan</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Ramadan" data-price="500" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Ramadan" data-price="500" data-type="package">
              <span class="text-amber-400 font-bold">$500</span>
              <span class="text-gray-200 text-sm text-center">Signature Ramadan</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Luxury Ramadan" data-price="700" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Luxury Ramadan" data-price="700" data-type="package">
              <span class="text-amber-400 font-bold">$700</span>
              <span class="text-gray-200 text-sm text-center">Luxury Ramadan</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Eid & Grand Iftar" data-price="1000" data-type="package">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Eid & Grand Iftar" data-price="1000" data-type="package">
              <span class="text-amber-400 font-bold">$1000</span>
              <span class="text-gray-200 text-sm text-center">Eid & Grand Iftar</span>
             </div>
@@ -689,48 +685,40 @@
 
            <h3 class="font-semibold text-white mb-3 text-lg border-b border-amber-400/20 pb-2">➕ Custom Add-Ons</h3>
            <div class="grid grid-cols-2 gap-3">
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Marquee Letters" data-price="75" data-type="addon">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Marquee Letters" data-price="75" data-type="addon">
              <span class="text-amber-400 font-bold">+$75</span>
              <span class="text-gray-200 text-sm text-center">Marquee Letters</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Throne Chair" data-price="115" data-type="addon">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Throne Chair" data-price="115" data-type="addon">
              <span class="text-amber-400 font-bold">+$115</span>
              <span class="text-gray-200 text-sm text-center">Throne Chair</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Cylinder Cake Table" data-price="60" data-type="addon">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Cylinder Cake Table" data-price="60" data-type="addon">
              <span class="text-amber-400 font-bold">+$60</span>
              <span class="text-gray-200 text-sm text-center">Cake Table</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Centerpieces" data-price="20" data-type="addon">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Centerpieces" data-price="20" data-type="addon">
              <span class="text-amber-400 font-bold">+$20</span>
              <span class="text-gray-200 text-sm text-center">Centerpieces</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Entry Aisle Decor" data-price="150" data-type="addon">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Entry Aisle Decor" data-price="150" data-type="addon">
              <span class="text-amber-400 font-bold">+$150</span>
              <span class="text-gray-200 text-sm text-center">Entry Aisle Décor</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Shimmer Wall Upgrade" data-price="170" data-type="addon">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Shimmer Wall Upgrade" data-price="170" data-type="addon">
              <span class="text-amber-400 font-bold">+$170</span>
              <span class="text-gray-200 text-sm text-center">Shimmer Upgrade</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Balloon Wall" data-price="200" data-type="addon">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800/80 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Balloon Wall" data-price="200" data-type="addon">
              <span class="text-amber-400 font-bold">+$200</span>
              <span class="text-gray-200 text-sm text-center">Balloon Wall (Base)</span>
-            </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Extra Florals" data-price="50" data-type="addon">
-             <span class="text-amber-400 font-bold">+$50</span>
-             <span class="text-gray-200 text-sm text-center">Extra Florals</span>
-            </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Travel Fee" data-price="0" data-type="addon">
-             <span class="text-amber-400 font-bold">Var.</span>
-             <span class="text-gray-200 text-sm text-center">Travel Fee</span>
             </div>
            </div>
           </div>
 
           <div class="w-full lg:w-1/2 lg:sticky lg:top-24">
-           <div id="drop-zone" class="h-full min-h-[500px] bg-slate-900/50 p-6 rounded-2xl border-2 border-dashed border-amber-400/40 flex flex-col transition-all duration-300">
-            <h3 class="text-2xl font-display font-bold text-white mb-2 text-center">Your Event Setup</h3>
+           <div id="drop-zone" class="h-full min-h-[500px] glass-effect p-6 rounded-2xl border-2 border-dashed border-amber-400/40 flex flex-col transition-all duration-300">
+            <h3 class="text-2xl font-display font-bold text-white mb-2 text-center tracking-tight">Your Event Setup</h3>
             <p class="text-gray-400 text-sm mb-6 text-center">Click or drag packages and add-ons here to build your quote.</p>
             
             <div id="cart-items" class="flex-grow space-y-3 mb-6">
@@ -739,7 +727,7 @@
 
             <div class="border-t border-amber-400/20 pt-6 mt-auto text-center">
              <p class="text-gray-400 mb-1">Estimated Total</p>
-             <div class="font-display text-5xl font-bold text-white mb-6">$<span id="calc-total">0</span></div>
+             <div class="font-display tracking-tight text-5xl font-bold text-white mb-6">$<span id="calc-total">0</span></div>
              <button type="button" onclick="sendQuoteToForm()" class="cta-button w-full px-8 py-4 rounded-lg text-lg font-semibold shadow-lg inline-flex items-center justify-center gap-2">
               <span>📝</span> Start Booking Request
              </button>
@@ -751,113 +739,103 @@
          </div>
         </div>
        </section>
-
+       
        <section id="gallery" class="relative z-20 w-full px-4 py-16 lg:py-24">
-        <div class="max-w-6xl mx-auto reveal gsap-fade-up">
-         <div class="text-center mb-16">
+        <div class="max-w-6xl mx-auto">
+         <div class="text-center mb-16 reveal">
           <span class="text-4xl mb-2 block" aria-hidden="true">🖼️</span>
-          <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Gallery</h2>
-          <p class="text-gray-300 text-lg max-w-2xl mx-auto">See our work shine in real celebrations</p>
+          <h2 class="font-display tracking-tight text-4xl lg:text-5xl font-bold gradient-text mb-4">Gallery</h2>
+          <p class="text-gray-300 leading-relaxed text-lg max-w-2xl mx-auto">See our work shine in real celebrations</p>
           <div class="divider-line w-32 mx-auto mt-6"></div>
          </div>
          
-         <div class="gallery-grid">
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%2014.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%2014.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%2014.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%2012.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%2012.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%2012.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%2011.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%2011.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%2011.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%2010.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%2010.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%2010.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%209.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%209.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%209.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%208.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%208.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%208.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%206.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%206.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%206.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%205.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%205.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%205.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%203.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%203.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%203.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59%202.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%202.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%202.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="PHOTO-2026-02-20-17-48-59.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59.jpg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM.jpeg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="WhatsApp%20Image%202026-02-20%20at%205.34.36%20PM.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.34.36%20PM.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.34.36%20PM.jpeg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="WhatsApp%20Image%202026-02-20%20at%205.32.53%20PM.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.32.53%20PM.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.32.53%20PM.jpeg')"></div> 
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-3.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-3.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-3.jpeg')"></div>
-          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20 gsap-gallery-img"><img src="WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-2.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-2.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-2.jpeg')"></div> 
+         <div class="gallery-grid reveal reveal-delay-1">
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%2014.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%2014.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%2014.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%2012.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%2012.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%2012.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%2011.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%2011.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%2011.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%2010.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%2010.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%2010.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%209.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%209.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%209.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%208.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%208.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%208.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%206.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%206.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%206.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%205.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%205.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%205.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%203.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%203.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%203.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59%202.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59%202.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59%202.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="PHOTO-2026-02-20-17-48-59.jpg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('PHOTO-2026-02-20-17-48-59.jpg')" onkeypress="if(event.key === 'Enter') openLightbox('PHOTO-2026-02-20-17-48-59.jpg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM.jpeg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="WhatsApp%20Image%202026-02-20%20at%205.34.36%20PM.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.34.36%20PM.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.34.36%20PM.jpeg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="WhatsApp%20Image%202026-02-20%20at%205.32.53%20PM.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.32.53%20PM.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.32.53%20PM.jpeg')"></div> 
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-3.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-3.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-3.jpeg')"></div>
+          <div class="rounded-xl overflow-hidden shadow-lg border border-amber-400/20"><img src="WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-2.jpeg" alt="Sparkle and Spritz Event Setup" class="portfolio-img w-full h-64 object-cover cursor-pointer" loading="lazy" tabindex="0" onclick="openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-2.jpeg')" onkeypress="if(event.key === 'Enter') openLightbox('WhatsApp%20Image%202026-02-20%20at%205.29.02%20PM-2.jpeg')"></div> 
          </div>
         </div>
        </section>
 
        <section id="faq" class="relative z-20 w-full px-4 py-16 lg:py-24">
-        <div class="max-w-4xl mx-auto reveal">
-         <div class="text-center mb-16 gsap-fade-up">
+        <div class="max-w-4xl mx-auto">
+         <div class="text-center mb-16 reveal">
           <span class="text-4xl mb-2 block" aria-hidden="true">❓</span>
-          <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Frequently Asked Questions</h2>
+          <h2 class="font-display tracking-tight text-4xl lg:text-5xl font-bold gradient-text mb-4">Frequently Asked Questions</h2>
           <div class="divider-line w-32 mx-auto mt-6"></div>
          </div>
          <div class="space-y-4">
-          <div class="rounded-lg p-6 lg:p-8 gsap-fade-up" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="rounded-lg p-6 lg:p-8 glass-effect reveal reveal-delay-1">
            <h3 class="text-white font-semibold text-lg mb-2">How far in advance should I book?</h3>
-           <p class="text-gray-400">We recommend booking 2-3 weeks in advance for custom designs. However, we do accommodate rush requests on a case-by-case basis depending on availability.</p>
+           <p class="text-gray-400 leading-relaxed">We recommend booking 2-3 weeks in advance for custom designs. However, we do accommodate rush requests on a case-by-case basis depending on availability.</p>
           </div>
-          <div class="rounded-lg p-6 lg:p-8 gsap-fade-up" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="rounded-lg p-6 lg:p-8 glass-effect reveal reveal-delay-2">
            <h3 class="text-white font-semibold text-lg mb-2">Do you offer color customization?</h3>
-           <p class="text-gray-400">Absolutely! All our packages are fully customizable. Share your color preferences, theme, or inspiration, and we'll create something perfect for your event.</p>
+           <p class="text-gray-400 leading-relaxed">Absolutely! All our packages are fully customizable. Share your color preferences, theme, or inspiration, and we'll create something perfect for your event.</p>
           </div>
-          <div class="rounded-lg p-6 lg:p-8 gsap-fade-up" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="rounded-lg p-6 lg:p-8 glass-effect reveal reveal-delay-3">
            <h3 class="text-white font-semibold text-lg mb-2">Is setup and teardown included?</h3>
-           <p class="text-gray-400">Yes! Professional delivery, setup, and teardown are included with all our packages. We handle everything so you can enjoy your event stress-free.</p>
+           <p class="text-gray-400 leading-relaxed">Yes! Professional delivery, setup, and teardown are included with all our packages. We handle everything so you can enjoy your event stress-free.</p>
           </div>
-          <div class="rounded-lg p-6 lg:p-8 gsap-fade-up" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="rounded-lg p-6 lg:p-8 glass-effect reveal reveal-delay-1">
            <h3 class="text-white font-semibold text-lg mb-2">What areas do you service?</h3>
-           <p class="text-gray-400">We service the Marietta, Kennesaw, Atlanta, and Woodstock areas. Contact us to confirm coverage for your location and discuss any travel fees if applicable.</p>
+           <p class="text-gray-400 leading-relaxed">We service the Marietta, Kennesaw, Atlanta, and Woodstock areas. Contact us to confirm coverage for your location and discuss any travel fees if applicable.</p>
           </div>
-          <div class="rounded-lg p-6 lg:p-8 gsap-fade-up" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="rounded-lg p-6 lg:p-8 glass-effect reveal reveal-delay-2">
            <h3 class="text-white font-semibold text-lg mb-2">Can you work with my budget?</h3>
-           <p class="text-gray-400">We love working with various budgets! Mix and match our packages and add-ons, or contact us to discuss custom solutions that fit your needs.</p>
+           <p class="text-gray-400 leading-relaxed">We love working with various budgets! Mix and match our packages and add-ons, or contact us to discuss custom solutions that fit your needs.</p>
           </div>
-          <div class="rounded-lg p-6 lg:p-8 gsap-fade-up" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
-           <h3 class="text-white font-semibold text-lg mb-2">Do you have liability insurance?</h3>
-           <p class="text-gray-400">Yes, we carry full liability insurance for all events. Your venue and guests are protected while we're working your celebration.</p>
-          </div>
-          <div class="rounded-lg p-6 lg:p-8 gsap-fade-up" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+          <div class="rounded-lg p-6 lg:p-8 glass-effect reveal reveal-delay-3">
            <h3 class="text-white font-semibold text-lg mb-2">What deposit is required to book?</h3>
-           <p class="text-gray-400">50% deposit required to reserve your date. The balance is due 1 week before your event. We accept multiple payment methods for your convenience.</p>
+           <p class="text-gray-400 leading-relaxed">50% deposit required to reserve your date. The balance is due 1 week before your event. We accept multiple payment methods for your convenience.</p>
           </div>
          </div>
         </div>
        </section>
 
        <section id="contact" class="relative z-20 w-full px-4 py-16 lg:py-24">
-        <div class="max-w-4xl mx-auto reveal gsap-fade-up">
-         <div class="text-center mb-12">
+        <div class="max-w-4xl mx-auto">
+         <div class="text-center mb-12 reveal">
           <span class="text-4xl mb-2 block" aria-hidden="true">📞</span>
-          <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Let's Create Magic Together</h2>
-          <p class="text-gray-300 text-lg mb-2">Please fill out our booking form as your first line of contact!</p>
+          <h2 class="font-display tracking-tight text-4xl lg:text-5xl font-bold gradient-text mb-4">Let's Create Magic Together</h2>
+          <p class="text-gray-300 leading-relaxed text-lg mb-2">Please fill out our booking form as your first line of contact!</p>
           <div class="divider-line w-32 mx-auto mt-6"></div>
          </div>
          
-         <form class="bg-white/5 p-6 lg:p-10 rounded-2xl backdrop-blur-md max-w-2xl mx-auto mb-12 border border-yellow-600/20 shadow-xl" action="https://formspree.io/f/xojnkagv" method="POST">
+         <form class="glass-effect p-6 lg:p-10 rounded-2xl max-w-2xl mx-auto mb-12 reveal shadow-xl" action="#" method="POST">
            <div class="mb-5">
              <label for="name" class="block text-white mb-2 font-medium">Full Name</label>
              <input type="text" id="name" name="name" class="contact-input w-full p-3 rounded-lg" placeholder="e.g. John Smith" required>
            </div>
            
-           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
-            <div>
+           <div class="mb-5">
              <label for="phone" class="block text-white mb-2 font-medium">Phone Number</label>
              <input type="tel" id="phone" name="phone" class="contact-input w-full p-3 rounded-lg" placeholder="(123) 456-7890" required>
-            </div>
-            <div>
-             <label for="event-date" class="block text-white mb-2 font-medium">Event Date</label>
-             <input type="date" id="event-date" name="event-date" class="contact-input w-full p-3 rounded-lg text-gray-300 uppercase" style="color-scheme: dark;">
-            </div>
            </div>
            
            <div class="mb-8">
              <label for="reason" class="block text-white mb-2 font-medium">Reason for Contacting</label>
-             <textarea id="reason" name="reason" class="contact-input w-full p-3 rounded-lg h-32 resize-y" placeholder="Tell us about your event! What are you celebrating, your location, themes, etc." required></textarea>
+             <textarea id="reason" name="reason" class="contact-input w-full p-3 rounded-lg h-32 resize-y" placeholder="Tell us about your event! What are you celebrating, your dates, themes, etc." required></textarea>
            </div>
            
            <button type="submit" class="cta-button w-full py-4 rounded-lg text-lg font-semibold tracking-wide shadow-lg">Submit Request</button>
          </form>
 
-         <div class="text-center">
-          <p class="text-gray-400 text-sm mb-2">Have a quick question or need additional help?</p>
+         <div class="text-center reveal reveal-delay-1">
+          <p class="text-gray-400 leading-relaxed text-sm mb-2">Have a quick question or need additional help?</p>
           <p class="text-xl text-white font-semibold">Give us a call at <a href="tel:4049523355" class="text-amber-400 hover:text-amber-300 transition-colors underline underline-offset-4 decoration-amber-400/50">(404) 952-3355</a></p>
          </div>
 
@@ -865,12 +843,12 @@
        </section>
    </main>
 
-   <footer class="relative z-20 w-full px-4 py-8 lg:py-12" style="border-top: 1px solid rgba(212, 175, 55, 0.2); background: rgba(26, 26, 46, 0.6);">
+   <footer class="relative z-20 w-full px-4 py-8 lg:py-12 glass-effect border-t border-amber-400/20 border-x-0 border-b-0">
     <div class="max-w-6xl mx-auto">
      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
       <div>
-       <h3 class="font-display text-lg font-semibold gradient-text mb-4">Sparkle &amp; Spritz LLC</h3>
-       <p class="text-gray-400 text-sm">Creating unforgettable moments with elegant event décor and styling. "You Celebrate, We Curate."</p>
+       <h3 class="font-display tracking-tight text-lg font-semibold gradient-text mb-4">Sparkle &amp; Spritz LLC</h3>
+       <p class="text-gray-400 leading-relaxed text-sm">Creating unforgettable moments with elegant event décor and styling. "You Celebrate, We Curate."</p>
       </div>
       <div>
        <h4 class="text-white font-semibold mb-4">Quick Links</h4>
@@ -886,7 +864,7 @@
        <div class="flex gap-4 text-gray-400">
         <a href="https://www.instagram.com/sparklespritz/" target="_blank" rel="noopener noreferrer" class="nav-link">Instagram</a> 
        </div>
-       <p class="text-gray-500 text-sm mt-4">📸 @sparklespritz</p>
+       <p class="text-gray-500 leading-relaxed text-sm mt-4">📸 @sparklespritz</p>
       </div>
      </div>
      <div class="divider-line mb-8"></div>
@@ -898,6 +876,7 @@
   </div>
   
   <script>
+   // [Configuration logic remains perfectly intact]
    const defaultConfig = {
     company_name: "Sparkle & Spritz",
     tagline: "Premium Event Décor",
@@ -908,6 +887,28 @@
     special_title: "Ramadan Balloon & Floral Décor",
     special_description: "Create a warm and elegant Ramadan atmosphere for your home or restaurant with our custom balloon and floral styling. Perfect for Iftar gatherings, Ramadan nights, Eid celebrations, and restaurant décor."
    };
+
+   // --- NEW: Apple-like Scroll Intersection Observer ---
+   document.addEventListener("DOMContentLoaded", () => {
+     const observerOptions = {
+       root: null,
+       rootMargin: "0px",
+       threshold: 0.15 // Triggers when 15% visible
+     };
+
+     const observer = new IntersectionObserver((entries, observer) => {
+       entries.forEach(entry => {
+         if (entry.isIntersecting) {
+           entry.target.classList.add('active');
+           observer.unobserve(entry.target); // Unobserve to only animate once
+         }
+       });
+     }, observerOptions);
+
+     document.querySelectorAll('.reveal').forEach(el => {
+       observer.observe(el);
+     });
+   });
 
    // Tab switching logic
    document.querySelectorAll('.package-tab').forEach(tab => {
@@ -932,10 +933,8 @@
     lightboxImg.src = src;
     lightbox.classList.remove('hidden');
     
-    // Focus the lightbox for accessibility
     lightbox.focus();
     
-    // Tiny timeout ensures the display transition has time to trigger the fade effect
     setTimeout(() => {
      lightbox.classList.remove('opacity-0');
     }, 10);
@@ -950,14 +949,10 @@
     }, 300);
    }
 
-   // Close lightbox when clicking anywhere on the black background
    document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) {
-     closeLightbox();
-    }
+    if (e.target === this) { closeLightbox(); }
    });
 
-   // Close lightbox with Escape key
    document.addEventListener('keydown', function(event) {
      if (event.key === "Escape" && !document.getElementById('lightbox').classList.contains('hidden')) {
        closeLightbox();
@@ -968,23 +963,19 @@
    const contactForm = document.querySelector('form');
    if (contactForm) {
     contactForm.addEventListener('submit', async function(e) {
-     e.preventDefault(); // Prevents the page from refreshing
+     e.preventDefault(); 
      
      const form = e.target;
      const data = new FormData(form);
      
      try {
-       // Send the data to Formspree
-       const response = await fetch(form.action, {
+       const response = await fetch("https://formspree.io/f/xojnkagv", {
          method: form.method,
          body: data,
-         headers: {
-             'Accept': 'application/json'
-         }
+         headers: { 'Accept': 'application/json' }
        });
        
        if (response.ok) {
-         // If successful, show your beautiful custom popup!
          const modal = document.getElementById('success-modal');
          const content = document.getElementById('success-content');
          
@@ -995,7 +986,7 @@
           content.classList.add('scale-100');
          }, 10);
          
-         form.reset(); // Clears the form fields
+         form.reset(); 
        } else {
          alert("Oops! There was a problem submitting your request. Please try giving us a call instead.");
        }
@@ -1004,7 +995,6 @@
      }
     });
    }
-
    function closeSuccessModal() {
     const modal = document.getElementById('success-modal');
     const content = document.getElementById('success-content');
@@ -1015,12 +1005,7 @@
     
     setTimeout(() => {
      modal.classList.add('hidden');
-     // Modified to work smoothly with Lenis
-     if(window.lenis) {
-         window.lenis.scrollTo(0, { duration: 1.5 });
-     } else {
-         window.scrollTo({ top: 0, behavior: 'smooth' });
-     }
+     window.scrollTo({ top: 0, behavior: 'smooth' }); 
     }, 300);
    }
 
@@ -1054,117 +1039,15 @@
    if (window.elementSdk) {
     window.elementSdk.init({ defaultConfig, onConfigChange, mapToCapabilities, mapToEditPanelValues });
    }
-
-   // --- PREMIUM ENGINE INIT (Lenis Smooth Scroll + GSAP) ---
-   document.addEventListener("DOMContentLoaded", (event) => {
-       // Initialize Lenis Smooth Scroll
-       const lenis = new Lenis({
-         duration: 1.2,
-         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-         direction: 'vertical',
-         gestureDirection: 'vertical',
-         smooth: true,
-         mouseMultiplier: 1,
-       });
-       
-       window.lenis = lenis; // Attach to window so buttons can access it
-       
-       function raf(time) {
-         lenis.raf(time);
-         requestAnimationFrame(raf);
-       }
-       requestAnimationFrame(raf);
-
-       // Initialize GSAP ScrollTrigger
-       gsap.registerPlugin(ScrollTrigger);
-
-       // 1. Parallax Hero Effect
-       gsap.to("#hero-content", {
-         yPercent: 50,
-         opacity: 0,
-         ease: "none",
-         scrollTrigger: {
-           trigger: "#hero",
-           start: "top top",
-           end: "bottom top",
-           scrub: true
-         }
-       });
-
-       // 2. Fade Up Sections
-       gsap.utils.toArray('.gsap-fade-up').forEach(section => {
-         gsap.from(section, {
-           y: 50,
-           opacity: 0,
-           duration: 1,
-           ease: "power3.out",
-           scrollTrigger: {
-             trigger: section,
-             start: "top 85%"
-           }
-         });
-       });
-
-       // 3. Staggered Cards (Services, Pricing, etc)
-       gsap.utils.toArray('.gsap-stagger-card').forEach(card => {
-         gsap.from(card, {
-           y: 50,
-           opacity: 0,
-           duration: 0.8,
-           ease: "power3.out",
-           scrollTrigger: {
-             trigger: card,
-             start: "top 90%"
-           }
-         });
-       });
-
-       // 4. Staggered Gallery Reveal
-       gsap.from(".gsap-gallery-img", {
-         y: 40,
-         opacity: 0,
-         duration: 0.8,
-         stagger: 0.05,
-         ease: "power2.out",
-         scrollTrigger: {
-           trigger: ".gallery-grid",
-           start: "top 85%"
-         }
-       });
-   });
-
-   // --- Scroll Reveal Fallback (For elements without GSAP classes) ---
-   document.addEventListener('DOMContentLoaded', () => {
-     const observerOptions = {
-       root: null,
-       rootMargin: '0px',
-       threshold: 0.15 
-     };
-
-     const observer = new IntersectionObserver((entries, observer) => {
-       entries.forEach(entry => {
-         if (entry.isIntersecting) {
-           entry.target.classList.add('active');
-           observer.unobserve(entry.target); 
-         }
-       });
-     }, observerOptions);
-
-     document.querySelectorAll('.reveal').forEach(el => {
-       observer.observe(el);
-     });
-   });
-
+   
    // --- Drag & Drop Builder Logic ---
    const dragItems = document.querySelectorAll('.drag-item');
    const dropZone = document.getElementById('drop-zone');
    const cartItemsContainer = document.getElementById('cart-items');
    const totalDisplay = document.getElementById('calc-total');
-   let cart = []; // Now tracks quantity!
+   let cart = [];
 
-   // Set up draggable items
    dragItems.forEach(item => {
-     // Desktop Dragging
      item.addEventListener('dragstart', (e) => {
        e.dataTransfer.setData('text/plain', JSON.stringify({
          name: item.dataset.name,
@@ -1178,16 +1061,14 @@
        item.classList.remove('opacity-40', 'scale-95');
      });
 
-     // Mobile Clicking Fallback
      item.addEventListener('click', () => {
        addToCart(item.dataset.name, parseInt(item.dataset.price), item.dataset.type);
      });
    });
 
-   // Set up Drop Zone
    if(dropZone) {
      dropZone.addEventListener('dragover', (e) => {
-       e.preventDefault(); // Required to allow dropping
+       e.preventDefault();
        dropZone.classList.add('bg-amber-400/10', 'border-amber-400', 'scale-[1.02]');
      });
 
@@ -1205,26 +1086,19 @@
    }
 
    function addToCart(name, price, type) {
-     // Check if item is already in cart
      const existingItem = cart.find(item => item.name === name);
-     
      if (existingItem) {
-       // If it is, just increase the quantity
        existingItem.quantity += 1;
      } else {
-       // If it's not, add it with a quantity of 1
        cart.push({ name, price, type, quantity: 1 });
      }
-     
      renderCart();
    }
 
-   // Update quantity with +/- buttons
    window.updateQty = function(name, change) {
      const item = cart.find(i => i.name === name);
      if (item) {
        item.quantity += change;
-       // Remove item if quantity drops to 0
        if (item.quantity <= 0) {
          cart = cart.filter(i => i.name !== name);
        }
@@ -1232,7 +1106,6 @@
      }
    }
 
-   // Remove completely with the X button
    window.removeFromCart = function(name) {
      cart = cart.filter(item => item.name !== name);
      renderCart();
@@ -1247,12 +1120,11 @@
      }
 
      cart.forEach(item => {
-       // Multiply price by quantity
        const itemTotal = item.price * item.quantity;
        total += itemTotal;
        
        const div = document.createElement('div');
-       div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-800 p-3 rounded-lg border border-amber-400/40 slide-up shadow-lg gap-3 mb-2';
+       div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-800/80 p-3 rounded-lg border border-amber-400/40 slide-up shadow-lg gap-3 mb-2';
        div.innerHTML = `
          <div class="flex items-center gap-3">
             <span class="text-xl">${item.type === 'package' ? '📦' : '✨'}</span>
@@ -1284,32 +1156,25 @@
 
      let summary = "Hi! I'd like to request a booking based on my custom built quote.\n\n";
      
-     // Build the summary list showing quantities
      cart.forEach(item => {
         let emoji = item.type === 'package' ? '📦' : '✨';
         summary += `${emoji} ${item.quantity}x ${item.name} ($${item.price * item.quantity})\n`;
      });
      
      summary += "\n💰 Estimated Total: $" + totalDisplay.textContent + "\n\n";
+     summary += "Event Date: \nEvent Location/Venue: \nTheme/Colors: ";
 
      const reasonBox = document.getElementById('reason');
      if (reasonBox) {
        reasonBox.value = summary;
+       document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
        
-       // Modified to use Lenis for buttery smooth scrolling to the contact form
-       if(window.lenis) {
-           window.lenis.scrollTo('#contact', { duration: 1.5 });
-       } else {
-           document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-       }
-       
-       // Briefly highlight the contact box so they see it was pre-filled
        reasonBox.style.transition = "background-color 0.5s ease";
        reasonBox.style.backgroundColor = "rgba(212, 175, 55, 0.3)";
        setTimeout(() => {
            reasonBox.style.backgroundColor = "rgba(26, 26, 46, 0.6)";
            reasonBox.focus();
-       }, 1500);
+       }, 800);
      }
    };
   </script>
