@@ -575,7 +575,74 @@
          </div>
         </div>
        </section>
+<section id="quote-calculator" class="relative z-20 w-full px-4 py-16 lg:py-24 bg-black/20 border-t border-amber-400/10">
+        <div class="max-w-4xl mx-auto">
+         <div class="text-center mb-12">
+          <span class="text-4xl mb-2 block" aria-hidden="true">🧮</span>
+          <h2 class="font-display text-4xl font-bold gradient-text mb-4">Build Your Quote</h2>
+          <p class="text-gray-300 text-lg max-w-2xl mx-auto">Get an instant estimate for your event and easily send it to us!</p>
+          <div class="divider-line w-32 mx-auto mt-6"></div>
+         </div>
 
+         <div class="bg-white/5 p-6 lg:p-10 rounded-2xl backdrop-blur-md border border-amber-400/20 shadow-xl">
+          <div class="mb-6">
+           <label class="block text-white mb-3 font-semibold text-lg">1. Choose Your Base Package</label>
+           <select id="calc-package" class="contact-input w-full p-4 rounded-lg text-lg appearance-none cursor-pointer">
+            <option value="0">-- Select a Package --</option>
+            <optgroup label="Standard Packages">
+             <option value="350">Essential ($350)</option>
+             <option value="500">Signature ($500)</option>
+             <option value="700">Luxury ($700)</option>
+             <option value="1000">Ultimate ($1000)</option>
+            </optgroup>
+            <optgroup label="Shimmer Wall Bundles">
+             <option value="450">Essential Shimmer ($450)</option>
+             <option value="550">Signature Shimmer ($550)</option>
+             <option value="650">Luxe Shimmer ($650)</option>
+             <option value="800">Ultimate Shimmer ($800)</option>
+            </optgroup>
+            <optgroup label="Ramadan & Eid Specials">
+             <option value="350">Essential Ramadan ($350)</option>
+             <option value="500">Signature Ramadan ($500)</option>
+             <option value="700">Luxury Ramadan ($700)</option>
+             <option value="1000">Eid & Grand Iftar ($1000)</option>
+            </optgroup>
+           </select>
+          </div>
+
+          <div class="mb-8">
+           <label class="block text-white mb-3 font-semibold text-lg">2. Select Your Add-Ons</label>
+           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="flex items-center gap-3 p-3 rounded-lg border border-amber-400/20 hover:bg-amber-400/10 cursor-pointer transition-colors">
+             <input type="checkbox" class="calc-addon w-5 h-5 accent-amber-500" value="75" data-name="Marquee Letters">
+             <span class="text-gray-200">Marquee Letters (+$75 est.)</span>
+            </label>
+            <label class="flex items-center gap-3 p-3 rounded-lg border border-amber-400/20 hover:bg-amber-400/10 cursor-pointer transition-colors">
+             <input type="checkbox" class="calc-addon w-5 h-5 accent-amber-500" value="115" data-name="Throne Chair">
+             <span class="text-gray-200">Throne Chair (+$115 est.)</span>
+            </label>
+            <label class="flex items-center gap-3 p-3 rounded-lg border border-amber-400/20 hover:bg-amber-400/10 cursor-pointer transition-colors">
+             <input type="checkbox" class="calc-addon w-5 h-5 accent-amber-500" value="60" data-name="Cylinder Cake Table">
+             <span class="text-gray-200">Cylinder Cake Table (+$60 est.)</span>
+            </label>
+            <label class="flex items-center gap-3 p-3 rounded-lg border border-amber-400/20 hover:bg-amber-400/10 cursor-pointer transition-colors">
+             <input type="checkbox" class="calc-addon w-5 h-5 accent-amber-500" value="150" data-name="Entry Aisle Décor">
+             <span class="text-gray-200">Entry Aisle Décor (+$150 est.)</span>
+            </label>
+           </div>
+          </div>
+
+          <div class="border-t border-amber-400/20 pt-8 mt-4 text-center">
+           <p class="text-gray-400 mb-2">Estimated Total</p>
+           <div class="font-display text-5xl font-bold text-white mb-6">$<span id="calc-total">0</span></div>
+           <button type="button" onclick="sendQuoteToForm()" class="cta-button w-full sm:w-auto px-10 py-4 rounded-lg text-lg font-semibold shadow-lg inline-flex items-center justify-center gap-2">
+            <span>📝</span> Start Booking Request
+           </button>
+           <p class="text-gray-500 text-xs mt-4">*This is a rough estimate. Final quotes may vary based on exact customizations and travel distance.</p>
+          </div>
+         </div>
+        </div>
+       </section>
        <section id="gallery" class="relative z-20 w-full px-4 py-16 lg:py-24">
         <div class="max-w-6xl mx-auto">
          <div class="text-center mb-16">
@@ -862,6 +929,63 @@
    if (window.elementSdk) {
     window.elementSdk.init({ defaultConfig, onConfigChange, mapToCapabilities, mapToEditPanelValues });
    }
+   // --- Build Your Quote Calculator Logic ---
+   const packageSelect = document.getElementById('calc-package');
+   const addonCheckboxes = document.querySelectorAll('.calc-addon');
+   const totalDisplay = document.getElementById('calc-total');
+
+   function calculateTotal() {
+     let total = parseInt(packageSelect.value) || 0;
+     addonCheckboxes.forEach(cb => {
+       if (cb.checked) {
+         total += parseInt(cb.value);
+       }
+     });
+     totalDisplay.textContent = total;
+   }
+
+   if(packageSelect) packageSelect.addEventListener('change', calculateTotal);
+   addonCheckboxes.forEach(cb => cb.addEventListener('change', calculateTotal));
+
+   window.sendQuoteToForm = function() {
+     if (!packageSelect) return;
+     const selectedPackage = packageSelect.options[packageSelect.selectedIndex];
+     
+     if (selectedPackage.value === "0") {
+       alert("Please select a base package first to build your quote!");
+       return;
+     }
+
+     let summary = "Hi! I'd like to request a booking based on my estimated quote.\n\n";
+     summary += "🎯 Base Package: " + selectedPackage.text + "\n";
+     
+     let addons = [];
+     addonCheckboxes.forEach(cb => {
+       if (cb.checked) addons.push(cb.getAttribute('data-name'));
+     });
+     
+     if (addons.length > 0) {
+       summary += "✨ Add-ons: " + addons.join(", ") + "\n";
+     }
+     
+     summary += "💰 Estimated Total: $" + totalDisplay.textContent + "\n\n";
+     summary += "Event Date: \nEvent Location/Venue: \nTheme/Colors: ";
+
+     const reasonBox = document.getElementById('reason');
+     if (reasonBox) {
+       reasonBox.value = summary;
+       // Scroll to the contact form smoothly
+       document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+       
+       // Briefly highlight the box so the user sees it pre-filled
+       reasonBox.style.transition = "background-color 0.5s ease";
+       reasonBox.style.backgroundColor = "rgba(212, 175, 55, 0.3)";
+       setTimeout(() => {
+           reasonBox.style.backgroundColor = "rgba(26, 26, 46, 0.6)";
+           reasonBox.focus();
+       }, 800);
+     }
+   };
   </script>
  </body>
 </html>
