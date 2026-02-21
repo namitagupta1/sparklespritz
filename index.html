@@ -1983,308 +1983,179 @@
    }
 
 // --- Drag & Drop Builder Logic ---
-
    const dragItems = document.querySelectorAll('.drag-item');
-
    const dropZone = document.getElementById('drop-zone');
-
    const cartItemsContainer = document.getElementById('cart-items');
-
    const totalDisplay = document.getElementById('calc-total');
-
-   let cart = []; // Now tracks quantity!
-
-
+   let cart = [];
 
    // Set up draggable items
-
    dragItems.forEach(item => {
-
      // Desktop Dragging
-
      item.addEventListener('dragstart', (e) => {
-
        e.dataTransfer.setData('text/plain', JSON.stringify({
-
          name: item.dataset.name,
-
          price: parseInt(item.dataset.price),
-
          type: item.dataset.type
-
        }));
-
        item.classList.add('opacity-40', 'scale-95');
-
      });
-
      
-
      item.addEventListener('dragend', () => {
-
        item.classList.remove('opacity-40', 'scale-95');
-
      });
-
-
 
      // Mobile Clicking Fallback
-
      item.addEventListener('click', () => {
-
        addToCart(item.dataset.name, parseInt(item.dataset.price), item.dataset.type);
-
      });
-
    });
 
-
-
    // Set up Drop Zone
-
    if(dropZone) {
-
      dropZone.addEventListener('dragover', (e) => {
-
-       e.preventDefault(); // Required to allow dropping
-
+       e.preventDefault(); 
        dropZone.classList.add('bg-amber-400/10', 'border-amber-400', 'scale-[1.02]');
-
      });
-
-
 
      dropZone.addEventListener('dragleave', () => {
-
        dropZone.classList.remove('bg-amber-400/10', 'border-amber-400', 'scale-[1.02]');
-
      });
-
-
 
      dropZone.addEventListener('drop', (e) => {
-
        e.preventDefault();
-
        dropZone.classList.remove('bg-amber-400/10', 'border-amber-400', 'scale-[1.02]');
-
        
-
        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-
-       addToCart(data.name, parseInt(data.price), data.type);
-
+       addToCart(data.name, data.price, data.type);
      });
-
    }
-
-
 
    function addToCart(name, price, type) {
+     // Determine if it's a Shimmer package or a Base (Standard/Ramadan) package
+     let isShimmerPackage = type === 'package' && name.includes('Shimmer');
+     let isBasePackage = type === 'package' && !name.includes('Shimmer');
 
-     // Check if item is already in cart
-
-     const existingItem = cart.find(item => item.name === name);
-
-     
-
-     if (existingItem) {
-
-       // If it is, just increase the quantity
-
-       existingItem.quantity += 1;
-
-     } else {
-
-       // If it's not, add it with a quantity of 1
-
-       cart.push({ name, price, type, quantity: 1 });
-
+     if (isBasePackage) {
+       // Remove any existing Base Package to seamlessly swap it out
+       cart = cart.filter(item => !(item.type === 'package' && !item.name.includes('Shimmer')));
+     } else if (isShimmerPackage) {
+       // Remove any existing Shimmer Package to seamlessly swap it out
+       cart = cart.filter(item => !(item.type === 'package' && item.name.includes('Shimmer')));
      }
 
+     // Check if the specific item is already in the cart
+     const existingItem = cart.find(item => item.name === name);
      
-
+     if (existingItem) {
+       if (type === 'package') {
+         // Stop them from adding a duplicate of the exact same package
+         alert("You already have this package selected!");
+       } else {
+         // It's an add-on, so let them stack quantities!
+         existingItem.quantity += 1;
+       }
+     } else {
+       // Add new item to cart
+       cart.push({ name, price, type, quantity: 1 });
+     }
+     
      renderCart();
-
    }
-
-
 
    // Update quantity with +/- buttons
-
    window.updateQty = function(name, change) {
-
      const item = cart.find(i => i.name === name);
-
      if (item) {
-      if (item.type === 'package' && change > 0) return alert("You can only select one base package per event!");
-
-       item.quantity += change;
-
-       // Remove item if quantity drops to 0
-
-       if (item.quantity <= 0) {
-
-         cart = cart.filter(i => i.name !== name);
-
+       // Stop them from using the + button to duplicate a package
+       if (item.type === 'package' && change > 0) {
+           return alert("You can only have one of each package category (1 Base Package and 1 Shimmer Package)!");
        }
-
+       
+       item.quantity += change;
+       if (item.quantity <= 0) {
+         cart = cart.filter(i => i.name !== name);
+       }
        renderCart();
-
      }
-
    }
-
-
 
    // Remove completely with the X button
-
    window.removeFromCart = function(name) {
-
      cart = cart.filter(item => item.name !== name);
-
      renderCart();
-
    }
-
-
 
    function renderCart() {
-
      cartItemsContainer.innerHTML = '';
-
      let total = 0;
 
-
-
      if (cart.length === 0) {
-
         cartItemsContainer.innerHTML = '<p class="text-gray-600 text-center mt-12 italic">Your setup is currently empty</p>';
-
      }
 
-
-
      cart.forEach(item => {
-
-       // Multiply price by quantity
-
        const itemTotal = item.price * item.quantity;
-
        total += itemTotal;
-
        
-
        const div = document.createElement('div');
-
        div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-800 p-3 rounded-lg border border-amber-400/40 slide-up shadow-lg gap-3 mb-2';
-
        div.innerHTML = `
-
          <div class="flex items-center gap-3">
-
             <span class="text-xl">${item.type === 'package' ? '📦' : '✨'}</span>
-
             <div>
-
                <p class="text-white font-medium">${item.name}</p>
-
                <p class="text-amber-400 text-sm">$${item.price} each</p>
-
             </div>
-
          </div>
-
          <div class="flex items-center gap-3 self-end sm:self-auto">
-
             <div class="flex items-center bg-slate-900 rounded-lg overflow-hidden border border-amber-400/20">
-
                <button type="button" onclick="window.updateQty('${item.name}', -1)" class="px-3 py-1 text-gray-400 hover:text-white hover:bg-slate-700 transition font-bold">-</button>
-
                <span class="text-white px-3 font-medium">${item.quantity}</span>
-
                <button type="button" onclick="window.updateQty('${item.name}', 1)" class="px-3 py-1 text-gray-400 hover:text-white hover:bg-slate-700 transition font-bold">+</button>
-
             </div>
-
             <button type="button" onclick="window.removeFromCart('${item.name}')" class="text-gray-400 hover:text-red-400 transition text-2xl px-2" title="Remove">&times;</button>
-
          </div>
-
        `;
-
        cartItemsContainer.appendChild(div);
-
      });
-
-
 
      totalDisplay.textContent = total;
-
    }
 
-
-
    window.sendQuoteToForm = function() {
-
      if (cart.length === 0) {
-
        alert("Please click or drag items into your setup box to build a quote first!");
-
        return;
-
      }
 
-if (parseInt(totalDisplay.textContent) > 3000) return alert("Your event looks grand! Since estimates over $3,000 require custom coordination, please call us directly at (404) 952-3355 to book.");
+     // High-ticket event warning
+     if (parseInt(totalDisplay.textContent) > 3000) {
+       return alert("Your event looks grand! Since estimates over $3,000 require custom coordination, please call us directly at (404) 952-3355 to book.");
+     }
 
      let summary = "Hi! I'd like to request a booking based on my custom built quote.\n\n";
-
      
-
-     // Build the summary list showing quantities
-
      cart.forEach(item => {
-
         let emoji = item.type === 'package' ? '📦' : '✨';
-
         summary += `${emoji} ${item.quantity}x ${item.name} ($${item.price * item.quantity})\n`;
-
      });
-
      
-
      summary += "\n💰 Estimated Total: $" + totalDisplay.textContent + "\n\n";
-
      summary += "Event Date: \nEvent Location/Venue: \nTheme/Colors: ";
 
-
-
      const reasonBox = document.getElementById('reason');
-
      if (reasonBox) {
-
        reasonBox.value = summary;
-
        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-
        
-
-       // Briefly highlight the contact box so they see it was pre-filled
-
        reasonBox.style.transition = "background-color 0.5s ease";
-
        reasonBox.style.backgroundColor = "rgba(212, 175, 55, 0.3)";
-
        setTimeout(() => {
-
            reasonBox.style.backgroundColor = "rgba(26, 26, 46, 0.6)";
-
            reasonBox.focus();
-
        }, 800);
-
      }
-
    };
 
   </script>
