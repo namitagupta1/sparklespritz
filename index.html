@@ -200,33 +200,6 @@
       opacity: 1;
       transform: translateY(0);
     }
-
-    /* Infinite Scrolling Marquee */
-    .marquee-container {
-      overflow: hidden;
-      white-space: nowrap;
-      position: relative;
-      width: 100%;
-      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    }
-    .marquee-content {
-      display: inline-block;
-      animation: marquee scroll 30s linear infinite;
-    }
-    .marquee-content:hover {
-      animation-play-state: paused;
-    }
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .testimonial-card {
-      display: inline-block;
-      white-space: normal;
-      width: 300px;
-      vertical-align: top;
-    }
   </style>
   <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
@@ -829,58 +802,6 @@
          </div>
         </div>
        </section>
-
-       <section class="relative z-20 w-full py-12 bg-black/40 border-y border-amber-400/10 reveal">
-        <div class="text-center mb-8">
-         <p class="text-amber-300 font-medium tracking-widest text-sm uppercase">Loved by clients across Georgia</p>
-        </div>
-        <div class="marquee-container">
-         <div class="marquee-content flex gap-6 px-3">
-          <div class="testimonial-card bg-slate-800/80 p-6 rounded-xl border border-amber-400/20">
-           <div class="text-amber-400 text-sm mb-3">⭐⭐⭐⭐⭐</div>
-           <p class="text-gray-300 italic text-sm mb-4">"The shimmer wall and balloon setup absolutely made our corporate event. Flawless execution!"</p>
-           <p class="text-white font-semibold text-sm">— Sarah M., Atlanta</p>
-          </div>
-          <div class="testimonial-card bg-slate-800/80 p-6 rounded-xl border border-amber-400/20">
-           <div class="text-amber-400 text-sm mb-3">⭐⭐⭐⭐⭐</div>
-           <p class="text-gray-300 italic text-sm mb-4">"Sparkle & Spritz turned my baby shower into a Pinterest dream. I didn't have to worry about a thing."</p>
-           <p class="text-white font-semibold text-sm">— Emily R., Marietta</p>
-          </div>
-          <div class="testimonial-card bg-slate-800/80 p-6 rounded-xl border border-amber-400/20">
-           <div class="text-amber-400 text-sm mb-3">⭐⭐⭐⭐⭐</div>
-           <p class="text-gray-300 italic text-sm mb-4">"Best Ramadan décor we've ever had. So elegant and sophisticated. Highly recommend!"</p>
-           <p class="text-white font-semibold text-sm">— Aisha K., Kennesaw</p>
-          </div>
-          <div class="testimonial-card bg-slate-800/80 p-6 rounded-xl border border-amber-400/20">
-           <div class="text-amber-400 text-sm mb-3">⭐⭐⭐⭐⭐</div>
-           <p class="text-gray-300 italic text-sm mb-4">"Professional, on-time, and the floral additions to the balloon arch were gorgeous."</p>
-           <p class="text-white font-semibold text-sm">— Jessica T., Woodstock</p>
-          </div>
-          
-          <div class="testimonial-card bg-slate-800/80 p-6 rounded-xl border border-amber-400/20">
-           <div class="text-amber-400 text-sm mb-3">⭐⭐⭐⭐⭐</div>
-           <p class="text-gray-300 italic text-sm mb-4">"The shimmer wall and balloon setup absolutely made our corporate event. Flawless execution!"</p>
-           <p class="text-white font-semibold text-sm">— Sarah M., Atlanta</p>
-          </div>
-          <div class="testimonial-card bg-slate-800/80 p-6 rounded-xl border border-amber-400/20">
-           <div class="text-amber-400 text-sm mb-3">⭐⭐⭐⭐⭐</div>
-           <p class="text-gray-300 italic text-sm mb-4">"Sparkle & Spritz turned my baby shower into a Pinterest dream. I didn't have to worry about a thing."</p>
-           <p class="text-white font-semibold text-sm">— Emily R., Marietta</p>
-          </div>
-          <div class="testimonial-card bg-slate-800/80 p-6 rounded-xl border border-amber-400/20">
-           <div class="text-amber-400 text-sm mb-3">⭐⭐⭐⭐⭐</div>
-           <p class="text-gray-300 italic text-sm mb-4">"Best Ramadan décor we've ever had. So elegant and sophisticated. Highly recommend!"</p>
-           <p class="text-white font-semibold text-sm">— Aisha K., Kennesaw</p>
-          </div>
-          <div class="testimonial-card bg-slate-800/80 p-6 rounded-xl border border-amber-400/20">
-           <div class="text-amber-400 text-sm mb-3">⭐⭐⭐⭐⭐</div>
-           <p class="text-gray-300 italic text-sm mb-4">"Professional, on-time, and the floral additions to the balloon arch were gorgeous."</p>
-           <p class="text-white font-semibold text-sm">— Jessica T., Woodstock</p>
-          </div>
-         </div>
-        </div>
-       </section>
-
        <section id="contact" class="relative z-20 w-full px-4 py-16 lg:py-24">
         <div class="max-w-4xl mx-auto reveal">
          <div class="text-center mb-12">
