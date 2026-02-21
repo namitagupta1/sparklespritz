@@ -1989,9 +1989,16 @@
    const totalDisplay = document.getElementById('calc-total');
    let cart = [];
 
+   // Set maximum limits for specific add-ons
+   const addonLimits = {
+     "Throne Chair": 2,
+     "Balloon Wall": 2,
+     "Entry Aisle Decor": 1,
+     "Shimmer Wall Upgrade": 1
+   };
+
    // Set up draggable items
    dragItems.forEach(item => {
-     // Desktop Dragging
      item.addEventListener('dragstart', (e) => {
        e.dataTransfer.setData('text/plain', JSON.stringify({
          name: item.dataset.name,
@@ -2005,13 +2012,11 @@
        item.classList.remove('opacity-40', 'scale-95');
      });
 
-     // Mobile Clicking Fallback
      item.addEventListener('click', () => {
        addToCart(item.dataset.name, parseInt(item.dataset.price), item.dataset.type);
      });
    });
 
-   // Set up Drop Zone
    if(dropZone) {
      dropZone.addEventListener('dragover', (e) => {
        e.preventDefault(); 
@@ -2032,44 +2037,49 @@
    }
 
    function addToCart(name, price, type) {
-     // Determine if it's a Shimmer package or a Base (Standard/Ramadan) package
      let isShimmerPackage = type === 'package' && name.includes('Shimmer');
      let isBasePackage = type === 'package' && !name.includes('Shimmer');
 
      if (isBasePackage) {
-       // Remove any existing Base Package to seamlessly swap it out
        cart = cart.filter(item => !(item.type === 'package' && !item.name.includes('Shimmer')));
      } else if (isShimmerPackage) {
-       // Remove any existing Shimmer Package to seamlessly swap it out
        cart = cart.filter(item => !(item.type === 'package' && item.name.includes('Shimmer')));
      }
 
-     // Check if the specific item is already in the cart
      const existingItem = cart.find(item => item.name === name);
      
      if (existingItem) {
        if (type === 'package') {
-         // Stop them from adding a duplicate of the exact same package
          alert("You already have this package selected!");
        } else {
-         // It's an add-on, so let them stack quantities!
-         existingItem.quantity += 1;
+         // Check if they hit the specific limit for this add-on
+         const limit = addonLimits[name];
+         if (limit && existingItem.quantity >= limit) {
+           alert(`You can only add up to ${limit} of this item online. If more customization is needed, please feel free to contact us!`);
+         } else {
+           existingItem.quantity += 1;
+         }
        }
      } else {
-       // Add new item to cart
        cart.push({ name, price, type, quantity: 1 });
      }
      
      renderCart();
    }
 
-   // Update quantity with +/- buttons
    window.updateQty = function(name, change) {
      const item = cart.find(i => i.name === name);
      if (item) {
-       // Stop them from using the + button to duplicate a package
        if (item.type === 'package' && change > 0) {
            return alert("You can only have one of each package category (1 Base Package and 1 Shimmer Package)!");
+       }
+       
+       // Check limit before adding more with the + button
+       if (change > 0) {
+         const limit = addonLimits[name];
+         if (limit && item.quantity >= limit) {
+           return alert(`You can only add up to ${limit} of this item online. If more customization is needed, please feel free to contact us!`);
+         }
        }
        
        item.quantity += change;
@@ -2080,7 +2090,6 @@
      }
    }
 
-   // Remove completely with the X button
    window.removeFromCart = function(name) {
      cart = cart.filter(item => item.name !== name);
      renderCart();
@@ -2129,7 +2138,6 @@
        return;
      }
 
-     // High-ticket event warning
      if (parseInt(totalDisplay.textContent) > 3000) {
        return alert("Your event looks grand! Since estimates over $3,000 require custom coordination, please call us directly at (404) 952-3355 to book.");
      }
@@ -2157,7 +2165,6 @@
        }, 800);
      }
    };
-
   </script>
 
   <script src="//code.tidio.co/a5w5urthnvmyazvm6vbfbhajqyeskjp1.js" async></script>
