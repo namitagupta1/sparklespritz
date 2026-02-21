@@ -780,28 +780,46 @@
      }
    });
 
-   // Form Submission & Success Popup Logic
+  // Form Submission & Success Popup Logic
    const contactForm = document.querySelector('form');
    if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', async function(e) {
      e.preventDefault(); // Prevents the page from refreshing
      
-     // Note: Once you connect Formspree or Netlify forms, you will put their submission code here!
+     const form = e.target;
+     const data = new FormData(form);
      
-     const modal = document.getElementById('success-modal');
-     const content = document.getElementById('success-content');
-     
-     modal.classList.remove('hidden');
-     setTimeout(() => {
-      modal.classList.remove('opacity-0');
-      content.classList.remove('scale-95');
-      content.classList.add('scale-100');
-     }, 10);
-     
-     this.reset(); // Clears the form fields
+     try {
+       // Send the data to Formspree
+       const response = await fetch("https://formspree.io/f/xojnkagv", {
+         method: form.method,
+         body: data,
+         headers: {
+             'Accept': 'application/json'
+         }
+       });
+       
+       if (response.ok) {
+         // If successful, show your beautiful custom popup!
+         const modal = document.getElementById('success-modal');
+         const content = document.getElementById('success-content');
+         
+         modal.classList.remove('hidden');
+         setTimeout(() => {
+          modal.classList.remove('opacity-0');
+          content.classList.remove('scale-95');
+          content.classList.add('scale-100');
+         }, 10);
+         
+         form.reset(); // Clears the form fields
+       } else {
+         alert("Oops! There was a problem submitting your request. Please try giving us a call instead.");
+       }
+     } catch (error) {
+       alert("Oops! There was a network error. Please try again.");
+     }
     });
    }
-
    function closeSuccessModal() {
     const modal = document.getElementById('success-modal');
     const content = document.getElementById('success-content');
