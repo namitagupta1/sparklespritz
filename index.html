@@ -580,17 +580,20 @@
          <div class="text-center mb-12">
           <span class="text-4xl mb-2 block" aria-hidden="true">✨</span>
           <h2 class="font-display text-4xl lg:text-5xl font-bold gradient-text mb-4">Build Your Custom Quote</h2>
-          <p class="text-gray-300 text-lg max-w-2xl mx-auto">Drag and drop your favorite items into your event box!</p>
+          <p class="text-gray-300 text-lg max-w-2xl mx-auto">Click or drag your favorite items into your event box to get an estimate!</p>
           <div class="divider-line w-32 mx-auto mt-6"></div>
          </div>
 
-         <div class="flex flex-col lg:flex-row gap-8">
+         <div class="flex flex-col lg:flex-row gap-8 items-start">
           
-          <div class="w-full lg:w-1/2 bg-white/5 p-6 rounded-2xl backdrop-blur-md border border-amber-400/20 shadow-xl">
-           <p class="text-sm text-amber-200/70 mb-4 uppercase tracking-wider text-center lg:text-left">Click or Drag items</p>
+          <div class="w-full lg:w-1/2 bg-white/5 p-6 rounded-2xl backdrop-blur-md border border-amber-400/20 shadow-xl lg:max-h-[700px] overflow-y-auto custom-scrollbar">
            
-           <h3 class="font-semibold text-white mb-3">📦 Packages</h3>
-           <div class="grid grid-cols-2 gap-3 mb-6">
+           <h3 class="font-semibold text-white mb-3 text-lg border-b border-amber-400/20 pb-2">📦 Standard Packages</h3>
+           <div class="grid grid-cols-2 gap-3 mb-8">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Package" data-price="350" data-type="package">
+             <span class="text-amber-400 font-bold">$350</span>
+             <span class="text-gray-200 text-sm text-center">Essential</span>
+            </div>
             <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Package" data-price="500" data-type="package">
              <span class="text-amber-400 font-bold">$500</span>
              <span class="text-gray-200 text-sm text-center">Signature</span>
@@ -603,13 +606,49 @@
              <span class="text-amber-400 font-bold">$1000</span>
              <span class="text-gray-200 text-sm text-center">Ultimate</span>
             </div>
+           </div>
+
+           <h3 class="font-semibold text-white mb-3 text-lg border-b border-amber-400/20 pb-2">✨ Shimmer Wall Bundles</h3>
+           <div class="grid grid-cols-2 gap-3 mb-8">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Shimmer" data-price="450" data-type="package">
+             <span class="text-amber-400 font-bold">$450</span>
+             <span class="text-gray-200 text-sm text-center">Essential Shimmer</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Shimmer" data-price="550" data-type="package">
+             <span class="text-amber-400 font-bold">$550</span>
+             <span class="text-gray-200 text-sm text-center">Signature Shimmer</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Luxe Shimmer" data-price="650" data-type="package">
+             <span class="text-amber-400 font-bold">$650</span>
+             <span class="text-gray-200 text-sm text-center">Luxe Shimmer</span>
+            </div>
             <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Ultimate Shimmer" data-price="800" data-type="package">
              <span class="text-amber-400 font-bold">$800</span>
              <span class="text-gray-200 text-sm text-center">Ultimate Shimmer</span>
             </div>
            </div>
 
-           <h3 class="font-semibold text-white mb-3">✨ Add-Ons</h3>
+           <h3 class="font-semibold text-white mb-3 text-lg border-b border-amber-400/20 pb-2">🌙 Ramadan & Eid Specials</h3>
+           <div class="grid grid-cols-2 gap-3 mb-8">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Ramadan" data-price="350" data-type="package">
+             <span class="text-amber-400 font-bold">$350</span>
+             <span class="text-gray-200 text-sm text-center">Essential Ramadan</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Signature Ramadan" data-price="500" data-type="package">
+             <span class="text-amber-400 font-bold">$500</span>
+             <span class="text-gray-200 text-sm text-center">Signature Ramadan</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Luxury Ramadan" data-price="700" data-type="package">
+             <span class="text-amber-400 font-bold">$700</span>
+             <span class="text-gray-200 text-sm text-center">Luxury Ramadan</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Eid & Grand Iftar" data-price="1000" data-type="package">
+             <span class="text-amber-400 font-bold">$1000</span>
+             <span class="text-gray-200 text-sm text-center">Eid & Grand Iftar</span>
+            </div>
+           </div>
+
+           <h3 class="font-semibold text-white mb-3 text-lg border-b border-amber-400/20 pb-2">➕ Custom Add-Ons</h3>
            <div class="grid grid-cols-2 gap-3">
             <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Marquee Letters" data-price="75" data-type="addon">
              <span class="text-amber-400 font-bold">+$75</span>
@@ -619,21 +658,33 @@
              <span class="text-amber-400 font-bold">+$115</span>
              <span class="text-gray-200 text-sm text-center">Throne Chair</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Cake Table" data-price="60" data-type="addon">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Cylinder Cake Table" data-price="60" data-type="addon">
              <span class="text-amber-400 font-bold">+$60</span>
              <span class="text-gray-200 text-sm text-center">Cake Table</span>
             </div>
-            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Entry Decor" data-price="150" data-type="addon">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Centerpieces" data-price="20" data-type="addon">
+             <span class="text-amber-400 font-bold">+$20</span>
+             <span class="text-gray-200 text-sm text-center">Centerpieces</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Entry Aisle Decor" data-price="150" data-type="addon">
              <span class="text-amber-400 font-bold">+$150</span>
-             <span class="text-gray-200 text-sm text-center">Entry Décor</span>
+             <span class="text-gray-200 text-sm text-center">Entry Aisle Décor</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Shimmer Wall Upgrade" data-price="170" data-type="addon">
+             <span class="text-amber-400 font-bold">+$170</span>
+             <span class="text-gray-200 text-sm text-center">Shimmer Upgrade</span>
+            </div>
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Balloon Wall" data-price="200" data-type="addon">
+             <span class="text-amber-400 font-bold">+$200</span>
+             <span class="text-gray-200 text-sm text-center">Balloon Wall (Base)</span>
             </div>
            </div>
           </div>
 
-          <div class="w-full lg:w-1/2">
-           <div id="drop-zone" class="h-full min-h-[450px] bg-slate-900/50 p-6 rounded-2xl border-2 border-dashed border-amber-400/40 flex flex-col transition-all duration-300">
+          <div class="w-full lg:w-1/2 lg:sticky lg:top-24">
+           <div id="drop-zone" class="h-full min-h-[500px] bg-slate-900/50 p-6 rounded-2xl border-2 border-dashed border-amber-400/40 flex flex-col transition-all duration-300">
             <h3 class="text-2xl font-display font-bold text-white mb-2 text-center">Your Event Setup</h3>
-            <p class="text-gray-400 text-sm mb-6 text-center">Drag packages and add-ons here to build your quote.</p>
+            <p class="text-gray-400 text-sm mb-6 text-center">Click or drag packages and add-ons here to build your quote.</p>
             
             <div id="cart-items" class="flex-grow space-y-3 mb-6">
              <p class="text-gray-600 text-center mt-12 italic">Your setup is currently empty</p>
@@ -645,6 +696,7 @@
              <button type="button" onclick="sendQuoteToForm()" class="cta-button w-full px-8 py-4 rounded-lg text-lg font-semibold shadow-lg inline-flex items-center justify-center gap-2">
               <span>📝</span> Start Booking Request
              </button>
+             <p class="text-gray-500 text-xs mt-4 px-2 leading-relaxed">*Please note: This total is a rough estimate. Final pricing may vary based on specific customizations, floral choices, travel distance, and other preferences.</p>
             </div>
            </div>
           </div>
