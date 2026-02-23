@@ -675,6 +675,19 @@
          <div id="standard-tab" class="tab-content" role="tabpanel">
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-16">
+           <div class="package-card rounded-2xl p-6 lg:p-8" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
+            <div class="flex items-center gap-3 mb-4">
+             <span class="text-3xl" aria-hidden="true">🎈</span>
+             <h3 class="font-display text-2xl lg:text-3xl font-semibold text-white">Grab & Go</h3>
+            </div>
+            <div class="mb-6"><span class="price-tag font-display text-4xl lg:text-5xl font-bold">$180–$200</span></div>
+            <ul class="space-y-3">
+             <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">6–7 ft organic balloon garland</span></li>
+             <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Pre-assembled & ready to hang</span></li>
+             <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Installation materials included</span></li>
+             <li class="flex items-start gap-3"><span class="check-icon text-lg mt-0.5">✔</span> <span class="text-gray-200">Client pickup only</span></li>
+            </ul>
+           </div>
 
            <div class="package-card rounded-2xl p-6 lg:p-8" style="background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);">
 
@@ -1181,6 +1194,10 @@
            <h3 class="font-semibold text-white mb-3 text-lg border-b border-amber-400/20 pb-2">📦 Standard Packages</h3>
 
            <div class="grid grid-cols-2 gap-3 mb-8">
+            <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Grab & Go Package" data-price="180" data-type="package">
+             <span class="text-amber-400 font-bold">$180</span>
+             <span class="text-gray-200 text-sm text-center">Grab & Go</span>
+            </div>
 
             <div draggable="true" class="drag-item flex flex-col justify-center items-center p-3 rounded-lg bg-slate-800 border border-amber-400/30 cursor-grab hover:bg-amber-400/20 transition-colors" data-name="Essential Package" data-price="350" data-type="package">
 
@@ -1993,7 +2010,9 @@
      "Throne Chair": 2,
      "Balloon Wall": 2,
      "Entry Aisle Decor": 1,
-     "Shimmer Wall Upgrade": 1
+     "Shimmer Wall Upgrade": 1,
+     "Marquee Letters": 6,
+     "Cylinder Cake Table": 2
    };
 
    // Set up draggable items
