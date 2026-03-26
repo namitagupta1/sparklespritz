@@ -2166,8 +2166,19 @@
         summary += `${emoji} ${item.quantity}x ${item.name} ($${item.price * item.quantity})\n`;
      });
      
-     summary += "\n💰 Estimated Total: $" + totalDisplay.textContent + "\n\n";
-     summary += "Event Date: \nEvent Location/Venue: \nTheme/Colors: ";
+summary += "\\n💰 Estimated Total: $" + totalDisplay.textContent + "\\n\\n";
+
+// Festival packages get extra fields
+const isFestivalPackage = cart.some(item => 
+  item.name.includes('Festival') || 
+  ['Essential Festival', 'Signature Festival', 'Luxury Festival', 'Festival Gala'].includes(item.name)
+);
+
+if (isFestivalPackage) {
+  summary += "Event Date: \\nEvent Venue/Location: \\nSpecific Festival: \\nCultural Theme/Colors: \\nSpecial Requests: ";
+} else {
+  summary += "Event Date: \\nEvent Location/Venue: \\nTheme/Colors: ";
+}
 
      const reasonBox = document.getElementById('reason');
      if (reasonBox) {
