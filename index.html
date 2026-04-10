@@ -2243,7 +2243,7 @@ window.sendQuoteToForm = function() {
     summary += `${emoji} ${item.quantity}x ${item.name} ($${item.price * item.quantity})\n`;
   });
   
-  summary += `\n💰 Estimated Total (starting from selected prices): $${totalDisplay.textContent}\n\n`;
+  summary += `\n💰 Estimated Total (starts from): $${totalDisplay.textContent}\n\n`;
   summary += "Event Date:\nEvent Location/Venue:\nTheme/Colors: ";
 
   const reasonBox = document.getElementById("reason");
