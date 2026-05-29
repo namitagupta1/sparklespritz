@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housewarming Wishes Slideshow</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f0fa; 
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #slideshow-container {
+            width: 85%;
+            max-width: 900px;
+            height: 550px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .image-section {
+            flex: 1;
+            background-color: #eaeaea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .text-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, #ffffff 0%, #fcfbfe 100%);
+        }
+
+        .wishes {
+            font-size: 24px;
+            color: #4a148c; 
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .wishes::before {
+            content: "“ ";
+            font-size: 40px;
+            color: #9c27b0;
+            line-height: 0;
+        }
+
+        .name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            text-align: right;
+            border-top: 2px solid #e1bee7;
+            padding-top: 15px;
+        }
+
+        #loading {
+            font-size: 24px;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading">Loading wishes...</div>
+    <div id="slideshow-container" style="display: none;"></div>
+
+    <script>
+
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1DQC8t3PqN87uQxr1cf2F75SaNQl3Bh6nPh7_Ex5CKqU/edit?usp=sharing';
+        
+        function getCsvUrl(url) {
+            const matches = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            if (matches && matches[1]) {
+                return `https://docs.google.com/spreadsheets/d/${matches[1]}/export?format=csv`;
+            }
+            return url;
+        }
+
+        const csvUrl = getCsvUrl(sheetUrl);
+        let currentIndex = 0;
+        let slides = [];
+
+        function formatDriveImageUrl(url) {
+            if (!url) return '';
+            
+            let id = '';
+            
+            // 1. Check for the standard /file/d/[ID]/view format (from your form)
+            if (url.includes('/file/d/')) {
+                const parts = url.split('/file/d/');
+                if (parts[1]) {
+                    id = parts[1].split('/')[0].split('?')[0];
+                }
+            } 
+            // 2. Fallback check for old legacy ?id= format
+            else if (url.includes('id=')) {
+                const parts = url.split('id=');
+                if (parts[1]) {
+                    id = parts[1].split('&')[0];
+                }
+            }
+            
+            // Return a reliable, direct stream download URL for the <img> tag
+            if (id) {
+                return `https://drive.google.com/uc?export=download&id=${id}`;
+            }
+            
+            return url;
+        }
+
+        function parseCSV(text) {
+            let p = '', r = [];
+            let q = false;
+            let row = [''];
+            for (let i=0; i<text.length; i++) {
+                let c = text[i];
+                if (c === '"') { q = !q; continue; }
+                if (c === ',' && !q) { row.push(''); continue; }
+                if (c === '\n' && !q) { r.push(row); row = ['']; continue; }
+                if (c === '\r') continue;
+                row[row.length-1] += c;
+            }
+            if (row.length > 1 || row[0] !== '') r.push(row);
+            return r;
+        }
+
+        async function fetchWishes() {
+            try {
+                const response = await fetch(csvUrl);
+                if (!response.ok) {
+                    throw new Error(`Google returned status ${response.status}`);
+                }
+                
+                const dataText = await response.text();
+                const rows = parseCSV(dataText);
+
+                const container = document.getElementById('slideshow-container');
+                container.innerHTML = ''; 
+                
+                for (let i = 1; i < rows.length; i++) {
+                    const name = rows[i][1];
+                    const wish = rows[i][2];
+                    const rawImgUrl = rows[i][3];
+
+                    if (!name || !wish) continue; 
+
+                    const imgUrl = formatDriveImageUrl(rawImgUrl);
+
+                    const slideDiv = document.createElement('div');
+                    console.log(imgUrl);
+                    slideDiv.className = 'slide';
+                    slideDiv.innerHTML = `
+                        <div class="image-section">
+                            ${imgUrl ? `<img src="${imgUrl}" alt="Photo from ${name}">` : `<div style="padding:20px; text-align:center; color:#999;">??<br>Best Wishes!</div>`}
+                        </div>
+                        <div class="text-section">
+                            <div class="wishes">${wish}</div>
+                            <div class="name">— ${name}</div>
+                        </div>
+                    `;
+                    container.appendChild(slideDiv);
+                }
+
+                slides = document.querySelectorAll('.slide');
+                if (slides.length > 0) {
+                    document.getElementById('loading').style.display = 'none';
+                    container.style.display = 'flex';
+                    showSlide(0);
+                    setInterval(nextSlide, 5000); 
+                } else {
+                    document.getElementById('loading').innerText = "No entries found yet!";
+                }
+
+            } catch (error) {
+                console.error("Error loading sheet data: ", error);
+                document.getElementById('loading').innerHTML = `
+                    <div style="color: #c62828; font-size: 18px; line-height: 1.5; padding: 20px; background: #ffebee; border-radius: 10px;">
+                        <strong>Data Fetch Failed</strong><br>
+                        Please double check your Google Sheet's Share settings are set to 
+                        <strong>"Anyone with the link can view"</strong>.
+                    </div>`;
+            }
+        }
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        fetchWishes();
+    </script>
+</body>
+</html>
