@@ -107,7 +107,7 @@
 
     <script>
 
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1DQC8t3PqN87uQxr1cf2F75SaNQl3Bh6nPh7_Ex5CKqU_x/edit?usp=sharing';
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1DQC8t3PqN87uQxr1cf2F75SaNQl3Bh6nPh7_Ex5CKqU/edit?usp=sharing';
         
         function getCsvUrl(url) {
             const matches = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
@@ -143,7 +143,11 @@
             
             // Return a reliable, direct stream download URL for the <img> tag
             if (id) {
-                return `https://drive.google.com/uc?export=download&id=${id}`;
+                return `https://drive.google.com/thumbnail?id=${id}&sz=w1200`; // working
+                //return `https://googleusercontent.com/profile/picture/0${id}`;
+                //return `https://drive.google.com/uc?export=view&id=${id}`;
+                //return `https://drive.usercontent.google.com/download?id=${id}&export=view&authuser=0`;
+                //return `https://drive.usercontent.google.com/download?id=${id}&export=view&authuser=0`;
             }
             
             return url;
