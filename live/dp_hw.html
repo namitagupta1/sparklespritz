@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housewarming Wishes Slideshow</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f3ebfc 0%, #e5daf5 40%, #dcd0f0 100%);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+            padding-bottom: 60px; /* Leaves headroom for the brand new footer rows */
+        }
+
+        /* ==========================================================================
+           BOTTOM LEFT BRAND FOOTER
+           ========================================================================== */
+        .brand-footer-left {
+            position: absolute;
+            bottom: 35px;
+            left: 45px;
+            z-index: 20;
+            text-align: left;
+        }
+
+        .brand-footer-left h1 {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 1.8rem;
+            color: #310a66;
+            margin: 0 0 2px 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-footer-left p {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #bfa15f; /* Warm luxury gold */
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           BOTTOM RIGHT SCANNABLE QR CODE WIDGET
+           ========================================================================== */
+        .qr-footer-right {
+            position: absolute;
+            bottom: 25px;
+            right: 45px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 12px 18px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(74, 20, 140, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .qr-container {
+            width: 80px;
+            height: 80px;
+            background: white;
+            padding: 4px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+
+        .qr-container img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .qr-message {
+            margin-left: 15px;
+            text-align: left;
+        }
+
+        .qr-message div:first-child {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #310a66;
+            margin-bottom: 2px;
+        }
+
+        .qr-message div:last-child {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           OUTER BOUNDARY TRACKS FOR FLOATING CELEBRATION KEYWORDS
+           ========================================================================== */
+        .perimeter-track {
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .track-top { top: 0; left: 0; width: 100%; height: 15vh; flex-direction: row; }
+        .track-bottom { bottom: 0; left: 0; width: 100%; height: 15vh; flex-direction: row; }
+        .track-left { top: 15vh; left: 0; width: 12vw; height: 70vh; flex-direction: column; }
+        .track-right { top: 15vh; right: 0; width: 12vw; height: 70vh; flex-direction: column; }
+
+        .bg-keyword {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 700;
+            font-style: italic;
+            color: #4a148c;
+            opacity: 0;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        @keyframes horizontalEvolve {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95) rotate(var(--rot)); }
+            20%, 80% { opacity: 0.15; transform: translateY(0) scale(1) rotate(var(--rot)); }
+            100% { opacity: 0; transform: translateY(-25px) scale(1.03) rotate(calc(var(--rot) + 3deg)); }
+        }
+
+        @keyframes verticalEvolve {
+            0% { opacity: 0; transform: translateX(-20px) scale(0.95) rotate(var(--rot)); }
+            20%, 80% { opacity: 0.15; transform: translateX(0) scale(1) rotate(var(--rot)); }
+            100% { opacity: 0; transform: translateX(20px) scale(1.03) rotate(calc(var(--rot) + 3deg)); }
+        }
+
+        .track-top #kw1 { font-size: 4rem; --rot: -6deg; animation: horizontalEvolve 13s infinite ease-in-out 0s; }
+        .track-top #kw2 { font-size: 3.8rem; --rot: 5deg; animation: horizontalEvolve 16s infinite ease-in-out 3s; }
+        .track-bottom #kw3 { font-size: 4.5rem; --rot: 7deg; animation: horizontalEvolve 17s infinite ease-in-out 5s; }
+        .track-bottom #kw4 { font-size: 4rem; --rot: -4deg; animation: horizontalEvolve 14s infinite ease-in-out 1.5s; }
+        .track-left #kw5 { font-size: 3.2rem; --rot: -90deg; animation: verticalEvolve 19s infinite ease-in-out 4s; }
+        .track-right #kw6 { font-size: 3.2rem; --rot: 90deg; animation: verticalEvolve 18s infinite ease-in-out 2s; }
+
+        /* Festive Floating Gold Particles */
+        .festive-particle {
+            position: absolute;
+            background: linear-gradient(135deg, #ffe082 0%, #bfa15f 100%);
+            border-radius: 50%;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 2;
+            animation: floatUpFestive 8s infinite linear;
+        }
+        #pt1 { width: 10px; height: 10px; left: 5%; animation-duration: 9s; animation-delay: 0s; }
+        #pt2 { width: 14px; height: 14px; left: 15%; animation-duration: 12s; animation-delay: 2s; }
+        #pt3 { width: 8px; height: 8px; right: 8%; animation-duration: 10s; animation-delay: 1s; }
+        #pt4 { width: 12px; height: 12px; right: 18%; animation-duration: 14s; animation-delay: 3s; }
+
+        @keyframes floatUpFestive {
+            0% { transform: translateY(105vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) translateX(50px) rotate(360deg); opacity: 0; }
+        }
+
+        /* ==========================================================================
+           MAIN SLIDESHOW CONTAINER
+           ========================================================================== */
+        #slideshow-container {
+            width: 85%;
+            max-width: 900px;
+            height: 520px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(74, 20, 140, 0.15);
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+            margin-top: -40px; /* Balances out layout position against bottom rows */
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 0.8s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        .slide.active { display: flex; }
+
+        /* Portrait Layout Rules */
+        .slide.vertical-layout { flex-direction: row; }
+        .vertical-layout .image-section { width: 45%; height: 100%; display: flex; }
+        .vertical-layout .text-section { width: 55%; height: 100%; padding: 50px; }
+
+        /* Landscape Layout Rules */
+        .slide.horizontal-layout { flex-direction: column; }
+        .horizontal-layout .image-section { width: 100%; height: 55%; display: flex; }
+        .horizontal-layout .text-section { width: 100%; height: 45%; padding: 25px 50px; }
+
+        /* Text Only Layout Rules */
+        .slide.no-image-layout { flex-direction: row; justify-content: center; align-items: center; }
+        .no-image-layout .image-section { display: none; }
+        .no-image-layout .text-section { width: 100%; height: 100%; padding: 60px 100px; text-align: center; }
+        .no-image-layout .name { text-align: center; display: inline-block; margin-left: auto; margin-right: auto; width: fit-content; padding-left: 30px; padding-right: 30px; }
+
+        /* Core Presentation Components */
+        .image-section { background-color: #fcfbfe; justify-content: center; align-items: center; overflow: hidden; }
+        .image-section img { width: 100%; height: 100%; object-fit: contain; background-color: #fcfbfe; }
+        
+        .text-section { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            background: linear-gradient(135deg, #ffffff 0%, #fdfbfe 100%); 
+            box-sizing: border-box; 
+        }
+        
+        .wishes { font-size: 25px; color: #310a66; font-style: italic; line-height: 1.6; margin-bottom: 25px; }
+        .horizontal-layout .wishes { font-size: 19px; margin-bottom: 12px; line-height: 1.4; }
+        .no-image-layout .wishes { font-size: 30px; line-height: 1.7; margin-bottom: 35px; }
+
+        .wishes::before { content: "“ "; font-size: 40px; color: #bfa15f; line-height: 0; }
+        .no-image-layout .wishes::before { font-size: 55px; }
+
+        .name { font-size: 19px; font-weight: bold; color: #444; text-align: right; border-top: 2px solid #f3ebfc; padding-top: 15px; }
+        .horizontal-layout .name { font-size: 15px; padding-top: 6px; }
+        .no-image-layout .name { font-size: 22px; padding-top: 20px; }
+
+        #loading { font-size: 24px; color: #310a66; text-align: center; padding: 20px; position: relative; z-index: 20; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="brand-footer-left">
+        <h1>Wishes & Blessings</h1>
+        <p>Decorated by Sparkle & Spritz</p>
+    </div>
+
+    <div class="qr-footer-right">
+        <div class="qr-container">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://forms.gle/tPNn6bbRFWqd4Jik9&color=310a66" alt="Scan QR code to add wishes">
+        </div>
+        <div class="qr-message">
+            <div>Add Your Wish!</div>
+            <div>Scan to send blessing live</div>
+        </div>
+    </div>
+
+    <div class="perimeter-track track-top">
+        <div class="bg-keyword" id="kw1">New Beginnings</div>
+        <div class="bg-keyword" id="kw2">Best Wishes</div>
+    </div>
+
+    <div class="perimeter-track track-left">
+        <div class="bg-keyword" id="kw5">Home Sweet Home</div>
+    </div>
+
+    <div class="perimeter-track track-right">
+        <div class="bg-keyword" id="kw6">Warm Blessings</div>
+    </div>
+
+    <div class="perimeter-track track-bottom">
+        <div class="bg-keyword" id="kw3">Beautiful House</div>
+        <div class="bg-keyword" id="kw4">Congratulations</div>
+    </div>
+
+    <div class="festive-particle" id="pt1"></div>
+    <div class="festive-particle" id="pt2"></div>
+    <div class="festive-particle" id="pt3"></div>
+    <div class="festive-particle" id="pt4"></div>
+
+    <div id="loading">Loading wishes...</div>
+    <div id="slideshow-container" style="display: none;"></div>
+
+    <script>
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1DQC8t3PqN87uQxr1cf2F75SaNQl3Bh6nPh7_Ex5CKqU/edit?usp=sharing';
+        
+        function getCsvUrl(url) {
+            const matches = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            if (matches && matches[1]) {
+                return `https://docs.google.com/spreadsheets/d/${matches[1]}/export?format=csv`;
+            }
+            return url;
+        }
+
+        const csvUrl = getCsvUrl(sheetUrl);
+        let currentIndex = 0;
+        let slides = [];
+
+        function formatDriveImageUrl(url) {
+            if (!url || url.trim() === '') return '';
+            let id = '';
+            
+            if (url.includes('/file/d/')) {
+                const parts = url.split('/file/d/');
+                if (parts[1]) {
+                    id = parts[1].split('/')[0].split('?')[0];
+                }
+            } else if (url.includes('id=')) {
+                const parts = url.split('id=');
+                if (parts[1]) {
+                    id = parts[1].split('&')[0];
+                }
+            }
+            
+            if (id) {
+                return `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
+            }
+            return url;
+        }
+
+        function parseCSV(text) {
+            let p = '', r = [];
+            let q = false;
+            let row = [''];
+            for (let i=0; i<text.length; i++) {
+                let c = text[i];
+                if (c === '"') { q = !q; continue; }
+                if (c === ',' && !q) { row.push(''); continue; }
+                if (c === '\n' && !q) { r.push(row); row = ['']; continue; }
+                if (c === '\r') continue;
+                row[row.length-1] += c;
+            }
+            if (row.length > 1 || row[0] !== '') r.push(row);
+            return r;
+        }
+
+        async function fetchWishes() {
+            try {
+                const response = await fetch(csvUrl);
+                if (!response.ok) {
+                    throw new Error(`Google returned status ${response.status}`);
+                }
+                
+                const dataText = await response.text();
+                const rows = parseCSV(dataText);
+
+                const container = document.getElementById('slideshow-container');
+                container.innerHTML = ''; 
+                
+                for (let i = 1; i < rows.length; i++) {
+                    const name = rows[i][1];
+                    const wish = rows[i][2];
+                    const rawImgUrl = rows[i][3];
+
+                    if (!name || !wish) continue; 
+
+                    const imgUrl = formatDriveImageUrl(rawImgUrl);
+
+                    const slideDiv = document.createElement('div');
+                    
+                    slideDiv.innerHTML = `
+                        <div class="image-section">
+                            ${imgUrl ? `<img src="${imgUrl}" alt="Photo from ${name}" class="responsive-img">` : ''}
+                        </div>
+                        <div class="text-section">
+                            <div class="wishes">${wish}</div>
+                            <div class="name">— ${name}</div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(slideDiv);
+
+                    if (imgUrl) {
+                        const img = slideDiv.querySelector('.responsive-img');
+                        slideDiv.className = 'slide'; 
+                        
+                        img.onload = function() {
+                            if (this.naturalWidth > this.naturalHeight) {
+                                slideDiv.className = 'slide horizontal-layout';
+                            } else {
+                                slideDiv.className = 'slide vertical-layout';
+                            }
+                        };
+                        
+                        img.onerror = function() {
+                            slideDiv.className = 'slide no-image-layout';
+                        };
+                    } else {
+                        slideDiv.className = 'slide no-image-layout';
+                    }
+                }
+
+                slides = document.querySelectorAll('.slide');
+                if (slides.length > 0) {
+                    document.getElementById('loading').style.display = 'none';
+                    container.style.display = 'flex';
+                    showSlide(0);
+                    setInterval(nextSlide, 5000); 
+                } else {
+                    document.getElementById('loading').innerText = "No entries found yet!";
+                }
+
+            } catch (error) {
+                console.error("Error loading sheet data: ", error);
+                document.getElementById('loading').innerHTML = `
+                    <div style="color: #c62828; font-size: 18px; line-height: 1.5; padding: 20px; background: #ffebee; border-radius: 10px;">
+                        <strong>No Data Found</strong>
+                    </div>`;
+            }
+        }
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        fetchWishes();
+    </script>
+</body>
+</html>
