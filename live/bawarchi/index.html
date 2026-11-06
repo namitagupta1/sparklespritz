@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tag Bawarchi & Sparkle & Spritz</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+      background-color: #fdfbf7;
+      color: #222;
+      margin: 0;
+    }
+    .card {
+      max-width: 380px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 32px 24px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      border: 1px solid #f0e6d6;
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      color: #1a1a1a;
+    }
+    p {
+      color: #555;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 16px;
+      background: #c59b27;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(197, 155, 39, 0.35);
+      transition: all 0.2s ease;
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+    .status {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #27ae60;
+      font-weight: 600;
+      display: none;
+    }
+    .manual-box {
+      margin-top: 24px;
+      padding: 12px;
+      background: #fcf9f2;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #777;
+    }
+    .handles {
+      font-weight: 700;
+      color: #1a1a1a;
+      display: block;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Strike a Pose! ✨</h2>
+    <p>Tap below to copy both handles and launch your Instagram camera to post your photo.</p>
+
+    <button class="btn" id="actionBtn" onclick="copyAndLaunch()">
+      📸 Copy Tags & Open Instagram
+    </button>
+
+    <div id="status" class="status">✓ Tags copied! Opening Instagram...</div>
+
+    <div class="manual-box">
+      If camera doesn't open automatically, paste these in your story:
+      <span class="handles">@bawarchibiryaniskennesaw @sparklespritz</span>
+    </div>
+  </div>
+
+  <script>
+    function copyAndLaunch() {
+      const handles = "@bawarchibiryaniskennesaw @sparklespritz";
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(handles).then(() => {
+          showStatusAndRedirect();
+        }).catch(() => {
+          fallbackCopy(handles);
+        });
+      } else {
+        fallbackCopy(handles);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+      } catch (err) {}
+      document.body.removeChild(textArea);
+      showStatusAndRedirect();
+    }
+
+    function showStatusAndRedirect() {
+      const status = document.getElementById('status');
+      status.style.display = 'block';
+
+      setTimeout(() => {
+        window.location.href = "instagram://story-camera";
+        setTimeout(() => {
+          window.location.href = "https://www.instagram.com/";
+        }, 1200);
+      }, 400);
+    }
+  </script>
+
+</body>
+</html>
